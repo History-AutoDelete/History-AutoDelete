@@ -66,6 +66,4 @@ browser.storage.local.get("URLS", function(results) {
 	urlsToRemove = new Set(results.URLS);
 	console.log(urlsToRemove);
 });
-getLocalURl.then(onGot, onError);
-
 browser.history.onVisited.addListener(onVisited);

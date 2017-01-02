@@ -16,6 +16,7 @@ function generateTableOfURLS() {
             td = document.createElement('td');
             var removeButton = document.createElement("button");
             removeButton.classList.add("url");
+            //removeButton.appendChild(document.createTextNode("X"));
             removeButton.addEventListener("click", clickRemoved);
             td.appendChild(removeButton);
             td.appendChild(document.createTextNode(array[i]));

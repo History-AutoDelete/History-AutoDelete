@@ -1,5 +1,9 @@
 td {
  margin: 5px;
- border: 2px solid black;
+ border: 1px solid black;
  min-width: 10em;
+}
+
+.line {
+	border: 1px solid black;
 }

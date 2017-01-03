@@ -3,7 +3,7 @@
     "scripts": ["background.js"]
   },
   "description": "Auto Delete Certain History",
-  "homepage_url": "https://github.com/mdn/webextensions-examples/tree/master/history-deleter",
+  "homepage_url": "https://github.com/mrdokenny/History-AutoDelete",
   "browser_action": {
     "default_icon": "icons/ic_history_black_24dp_2x.png",
     "default_title": "History AutoDeleter",
@@ -22,5 +22,5 @@
   ],
   "manifest_version": 2,
   "name": "History AutoDeleter",
-  "version": "1.0"
+  "version": "1.0.0"
 }

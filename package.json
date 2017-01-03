@@ -1,0 +1,7 @@
+{
+  "name:": "History-AutoDelete",
+  "version": "1.0.0",
+  "devDependencies": {
+    "sinon-chrome": "^2.1.2"
+  }
+}

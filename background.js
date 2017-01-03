@@ -60,12 +60,12 @@ function onVisited(historyItem) {
 	}
 
 }
-
+/*
 exports.main = {
 	addURL: addURL,
 	hasHost: hasHost
 }
-
+*/
 var urlsToRemove;
 browser.storage.local.get("URLS", function(results) {
 	urlsToRemove = new Set(results.URLS);

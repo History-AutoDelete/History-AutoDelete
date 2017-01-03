@@ -14,9 +14,9 @@ function generateTableOfURLS() {
         for (var i = 0, tr, td; i < arrayLength; i++) {
             tr = document.createElement('tr');
             td = document.createElement('td');
-            var removeButton = document.createElement("button");
+            var removeButton =  new Image();
             removeButton.classList.add("url");
-            //removeButton.appendChild(document.createTextNode("X"));
+            removeButton.src = '../icons/close-circle.png';
             removeButton.addEventListener("click", clickRemoved);
             td.appendChild(removeButton);
             td.appendChild(document.createTextNode(array[i]));

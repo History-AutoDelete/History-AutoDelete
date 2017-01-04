@@ -75,11 +75,13 @@ browser.storage.local.get("URLS", function(results) {
 });
 browser.history.onVisited.addListener(onVisited);
 
-//Logic that controls when the page action appears (when it is not about: page and not private browsing)
+//Logic that controls what happens when you click on the browser action icon
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 	browser.windows.getCurrent(function(windowInfo) {
 		if (!tab.url.match(/^about:/) && !windowInfo.incognito) {
-			browser.pageAction.show(tab.id);
+			browser.browserAction.enable(tab.id);
+		} else {
+			browser.browserAction.disable(tab.id);
 		}
 	});
 

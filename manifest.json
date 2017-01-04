@@ -18,10 +18,9 @@
     "activeTab",
     "history",
     "tabs",
-    "storage",
-    "windows"
+    "storage"
   ],
   "manifest_version": 2,
   "name": "History AutoDeleter",
-  "version": "1.0.0"
+  "version": "0.5.0"
 }

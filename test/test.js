@@ -1,10 +1,45 @@
-const chrome = require('sinon-chrome');
-var background = require("../background.js").main;
-var assert = require("chai").assert;
+var fs = require('fs');
+var sinon = require('sinon');
+var browser = require('sinon-chrome');
+var assert = require('chai').assert;
+//var jsdom = require('jsdom');
 var answer = 42;
 
-describe("Test", function() {
-	it("should be added to set", function() {
-		assert.equal(42, answer);
-	})
-})
+describe('background page', function () {
+/*
+    var window;
+
+    beforeEach(function (done) {
+        jsdom.env({
+            // generated background page
+            html: '<html></html>',
+            // js source
+            src: [fs.readFileSync('../background.js', 'utf-8')],
+            created: function (errors, wnd) {
+                // attach `browser` to window
+                wnd.browser = browser;
+                wnd.console = console;
+            },
+            done: function (errors, wnd) {
+                if (errors) {
+                    console.log(errors);
+                    done(true);
+                } else {
+                    window = wnd;
+                    done();
+                }
+            }
+        });
+    });
+
+    afterEach(function () {
+        browser.reset();
+        window.close();
+
+    });
+*/
+    it("equal 42", function() {
+    	assert.equal(answer, 42, "it equals!");
+    });
+    
+});

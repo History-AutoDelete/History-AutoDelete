@@ -2,6 +2,12 @@
   "name:": "History-AutoDelete",
   "version": "1.0.0",
   "devDependencies": {
-    "sinon-chrome": "^2.1.2"
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "sinon-chrome": "^2.1.2",
+    "jsdom": "^9.9.1"
+  },
+  "scripts": {
+    "test": "mocha test/test.js"
   }
 }

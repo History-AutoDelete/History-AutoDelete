@@ -72,4 +72,4 @@ function clearAll(e) {
 	e.preventDefault();
 }
 
-document.getElementById('clear').addEventListener('click', clearAll);
+//document.getElementById('clear').addEventListener('click', clearAll);

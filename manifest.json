@@ -4,7 +4,7 @@
   },
   "description": "Auto Delete Certain History",
   "homepage_url": "https://github.com/mrdokenny/History-AutoDelete",
-  "browser_action": {
+  "page_action": {
     "default_icon": "icons/ic_history_black_24dp_2x.png",
     "default_title": "History AutoDeleter",
     "default_popup": "popup/popup.html"
@@ -18,7 +18,8 @@
     "activeTab",
     "history",
     "tabs",
-    "storage"
+    "storage",
+    "windows"
   ],
   "manifest_version": 2,
   "name": "History AutoDeleter",

@@ -64,6 +64,16 @@ function onVisited(historyItem) {
 var urlsToRemove;
 browser.storage.local.get("URLS", function(results) {
 	urlsToRemove = new Set(results.URLS);
-	console.log(urlsToRemove);
+	//console.log(urlsToRemove);
 });
 browser.history.onVisited.addListener(onVisited);
+
+
+browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+	browser.windows.getCurrent(function(windowInfo) {
+		if (!tab.url.match(/^about:/) && !windowInfo.incognito) {
+			browser.pageAction.show(tab.id);
+		}
+	});
+
+});

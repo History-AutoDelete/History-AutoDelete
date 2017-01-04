@@ -68,4 +68,3 @@ function clearAll(e) {
 }
 
 document.getElementById('clear').addEventListener('click', clearAll);
-

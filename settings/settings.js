@@ -1,3 +1,4 @@
+//Remove the url where the user clicked
 function clickRemoved(event) {
     if(event.target.classList.contains("url")) {
         //console.log(event.target.parentElement.textContent);
@@ -5,6 +6,7 @@ function clickRemoved(event) {
     }
 }
 
+//Generate the url table
 function generateTableOfURLS() {
     browser.storage.local.get("URLS", function (result) {
         var array = result.URLS;
@@ -31,10 +33,12 @@ function generateTableOfURLS() {
 generateTableOfURLS();
 var page = browser.extension.getBackgroundPage();
 
+//Event handler for the clear url button
 document.getElementById("clear").addEventListener("click", function(){
     page.clearURL();
 })
 
+//Reload the page when the local storage changes
 browser.storage.onChanged.addListener(function() {
     location.reload();
 });

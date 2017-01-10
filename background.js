@@ -10,16 +10,15 @@ function onSuccess() {
 
 //Returns the host name of the url. Etc. "https://en.wikipedia.org/wiki/Cat" becomes en.wikipedia.org
 function get_hostname(url) {
-	var temp = url.split("/")[2];
-	var searchIndex = temp.search("https://");
-	if(searchIndex != -1) {
-		temp.slice(8);
-	}
-	searchIndex = temp.search("www.");
-	if(searchIndex != -1) {
-		temp = temp.slice(4);
-	}
-	return temp;
+    try {
+		var hostname = new URL(url).hostname;
+    } catch(e) {
+    	console.log("Invalid URL");
+    }
+
+    // Strip "www." if the URL starts with it.
+    hostname = hostname.replace(/^www\./, '');
+    return hostname;
 }
 
 //See if the set has the url
@@ -36,8 +35,13 @@ function storeLocal() {
 
 //Add the url to the set
 function addURL(url) {
-	urlsToRemove.add(url);
-	storeLocal();
+	if(!hasHost(url)) {
+		urlsToRemove.add(url);
+		storeLocal();
+	} else {
+		console.log("Already have " + url);
+	}
+
 }
 
 //Remove the url from the set

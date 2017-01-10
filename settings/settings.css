@@ -1,10 +1,37 @@
+
+h1 {
+	padding-bottom: 1em;
+    border-bottom: 1px solid grey;
+}
 td {
 	margin: 5px;
 	border: 1px solid black;
-	min-width: 10em;
-
+	border-collapse: collapse;
+  	max-height: 10px;
 }
 
-.url {
-//	padding: .01em;
+table {
+	width: 100%;
+	height: 100;
+}
+
+input {
+	width: 100%;
+}
+
+#tableContainer {
+	margin-top: 2em;
+	margin-bottom: 2em;
+	height: 10em;
+	overflow: auto;
+}
+
+.removeIcon {
+	padding-left: .5em;
+	padding-right: 1em;
+}
+
+.content {
+	padding-left: 10em;
+	width: 40em;
 }

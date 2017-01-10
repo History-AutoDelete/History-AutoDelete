@@ -3,23 +3,31 @@
 <html>
 <head>
 	<link rel="stylesheet" href="settings.css">
+	<title>History AutoDelete Settings</title>
+	<meta charset="UTF-8"> 
 </head>
 
 <body>
-<div>
-<h1>
-History AutoDelete Settings
-</h1>
+	<div class="content">
+		<h1>
+			List of URLS
+		</h1>
 
+		<input id="URLForm" type="text">
 
-</div>
-<h2>List of URLS</h2>
-<button id="clear">
-<span>Clear URLS</span>
-</button>
-<div id="table">
+		<br>
 
-</div>
+		<button id="add">
+			<span>Add URL</span>
+		</button>		
+		<button id="clear">
+			<span>Remove All</span>
+		</button>
+		<div id="tableContainer">
+
+		</div>
+
+	</div>
 </body>
 
 <script type="text/javascript" src="settings.js"></script>

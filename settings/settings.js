@@ -22,6 +22,16 @@ function downloadCSV(arr) {
     hiddenElement.click();
 }  
 
+function addURLFromInput() {
+    var input = document.getElementById("URLForm").value;
+    if(input) {
+        var URL = "http://www." + input;
+        page.addURL(page.get_hostname(URL));
+        document.getElementById("URLForm").value = "";
+        document.getElementById("URLForm").focus();  
+    }   
+}
+
 //Generate the url table
 function generateTableOfURLS() {
     browser.storage.local.get("URLS", function (result) {
@@ -55,17 +65,15 @@ document.getElementById("clear").addEventListener("click", function() {
 });
 
 //Event handler for the user entering a URL through a form
-document.getElementById("add").addEventListener("click", function() {
-    var input = document.getElementById("URLForm").value;
-    if(input) {
-        var URL = "http://www." + input;
-        page.addURL(page.get_hostname(URL));
-        document.getElementById("URLForm").value = "";    
+document.getElementById("add").addEventListener("click", addURLFromInput);
+
+//Event handler when the user press "Enter" on a keyboard on the URL Form
+document.getElementById("URLForm").addEventListener("keypress", function (e) {
+    var key = e.which || e.keyCode;
+    if (key === 13) {
+      addURLFromInput();
     }
-
-
 });
-
 //Exports urls to a CSV file
 document.getElementById("exportURLS").addEventListener("click", function() {
     browser.storage.local.get("URLS", function(results) {

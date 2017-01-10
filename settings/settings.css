@@ -22,7 +22,7 @@ input {
 #tableContainer {
 	margin-top: 2em;
 	margin-bottom: 2em;
-	height: 10em;
+	height: 15em;
 	overflow: auto;
 	border: 1px solid black;	
 }

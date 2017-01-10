@@ -75,7 +75,7 @@ var urlsToRemove;
 //Grabs the local storage's urls and initialize the set with it
 browser.storage.local.get("URLS", function(results) {
 	urlsToRemove = new Set(results.URLS);
-	//console.log(urlsToRemove);
+//	console.log(results.URLS);
 });
 browser.history.onVisited.addListener(onVisited);
 

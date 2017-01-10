@@ -6,6 +6,22 @@ function clickRemoved(event) {
     }
 }
 
+function downloadCSV(arr) {
+    var csv = "";
+    arr.forEach(function(row) {
+            csv += row;
+            csv += "\n";
+    });
+ 
+    console.log(csv);
+    var hiddenElement = document.createElement('a');
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = 'urls.csv';
+    document.body.appendChild(hiddenElement);
+    hiddenElement.click();
+}  
+
 //Generate the url table
 function generateTableOfURLS() {
     browser.storage.local.get("URLS", function (result) {
@@ -49,6 +65,27 @@ document.getElementById("add").addEventListener("click", function() {
 
 
 });
+
+//Exports urls to a CSV file
+document.getElementById("exportURLS").addEventListener("click", function() {
+    browser.storage.local.get("URLS", function(results) {
+        downloadCSV(results.URLS);
+    });
+});
+
+function openCSV(event) {
+    var reader = new FileReader();
+    reader.onload = function(event) {
+        var contents = event.target.result;
+        console.log("File contents: " + contents);
+    };
+
+    reader.onerror = function(event) {
+        console.error("File could not be read! Code " + event.target.error.code);
+    };
+
+    reader.readAsText(file);
+}
 
 //Reload the page when the local storage changes
 browser.storage.onChanged.addListener(function() {

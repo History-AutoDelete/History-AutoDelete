@@ -1,3 +1,42 @@
+/*
+    Panel Logic
+*/
+//Switchs the panel
+function panelSwitch(event) {
+    var element = event.target;
+    if(element.tagName == "SPAN") {
+        element = element.parentElement;
+    }
+    //console.log(element);
+    if(panelTabToContentMap.has(element)) {
+        panelTabToContentMap.forEach(function(value, key, map) {         
+            if(element == key) {
+                key.classList.add("panelTabSelected");
+                value.style.display = 'block';
+            } else {
+                key.classList.remove("panelTabSelected"); 
+                value.style.display = 'none';
+            }
+        }); 
+    }
+}
+
+//Map that stores the tab to the corresponding content
+var panelTabToContentMap = new Map();
+panelTabToContentMap.set(document.getElementById("tab1"), document.getElementById("historySettingsContent"));
+panelTabToContentMap.set(document.getElementById("tab2"), document.getElementById("listOfURLSContent"));
+
+//Set a click event for each tab in the Map
+panelTabToContentMap.forEach(function(value, key, map) {
+    key.addEventListener("click", panelSwitch);
+});
+/*
+    History Settings Logic
+*/
+
+/*
+    List of URLS Logic
+*/
 //Remove the url where the user clicked
 function clickRemoved(event) {
     if(event.target.classList.contains("removeIcon")) {
@@ -6,6 +45,7 @@ function clickRemoved(event) {
     }
 }
 
+//Export the list of URLS as a CSV file
 function downloadCSV(arr) {
     var csv = "";
     arr.forEach(function(row) {
@@ -22,6 +62,7 @@ function downloadCSV(arr) {
     hiddenElement.click();
 }  
 
+//Add URL by keyboard input
 function addURLFromInput() {
     var input = document.getElementById("URLForm").value;
     if(input) {
@@ -32,8 +73,26 @@ function addURLFromInput() {
     }   
 }
 
+function openCSV(event) {
+    var reader = new FileReader();
+    reader.onload = function(event) {
+        var contents = event.target.result;
+        console.log("File contents: " + contents);
+    };
+
+    reader.onerror = function(event) {
+        console.error("File could not be read! Code " + event.target.error.code);
+    };
+
+    reader.readAsText(file);
+}
+
 //Generate the url table
 function generateTableOfURLS() {
+    var tableContainerNode = document.getElementById('tableContainer');
+    while (tableContainerNode.firstChild) {
+        tableContainerNode.removeChild(tableContainerNode.firstChild);
+    }
     browser.storage.local.get("URLS", function (result) {
         var array = result.URLS;
         var arrayLength = array.length;
@@ -59,7 +118,7 @@ function generateTableOfURLS() {
 generateTableOfURLS();
 var page = browser.extension.getBackgroundPage();
 
-//Event handler for the clear url button
+//Event handler for the Remove All button
 document.getElementById("clear").addEventListener("click", function() {
     page.clearURL();
 });
@@ -74,6 +133,7 @@ document.getElementById("URLForm").addEventListener("keypress", function (e) {
       addURLFromInput();
     }
 });
+
 //Exports urls to a CSV file
 document.getElementById("exportURLS").addEventListener("click", function() {
     browser.storage.local.get("URLS", function(results) {
@@ -81,21 +141,7 @@ document.getElementById("exportURLS").addEventListener("click", function() {
     });
 });
 
-function openCSV(event) {
-    var reader = new FileReader();
-    reader.onload = function(event) {
-        var contents = event.target.result;
-        console.log("File contents: " + contents);
-    };
-
-    reader.onerror = function(event) {
-        console.error("File could not be read! Code " + event.target.error.code);
-    };
-
-    reader.readAsText(file);
-}
-
-//Reload the page when the local storage changes
+//Generate the table again when the local storage changes
 browser.storage.onChanged.addListener(function() {
-    location.reload();
+    generateTableOfURLS();
 });

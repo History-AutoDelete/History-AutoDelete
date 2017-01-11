@@ -1,8 +1,16 @@
 
-h1 {
-	padding-bottom: 1em;
-    border-bottom: 1px solid grey;
+body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	position: fixed;
 }
+
+h1 {
+    border-bottom: 1px solid grey;
+    padding-bottom: 4px;
+}
+
 td {
 	margin: 5px;
 	border: 1px solid black;
@@ -12,11 +20,15 @@ td {
 
 table {
 	width: 100%;
-	height: 100;
 }
 
 input {
-	width: 100%;
+	margin-top: 5px;
+	margin-bottom: 2px;
+}
+
+button:hover {
+	cursor: pointer;
 }
 
 #tableContainer {
@@ -28,11 +40,53 @@ input {
 }
 
 .removeIcon {
-	padding-left: .5em;
-	padding-right: 1em;
+	margin-left: .5em;
+	margin-right: 1em;
+}
+.removeIcon:hover {
+	cursor: pointer;
+	opacity: 0.5;
+	transition-duration: 0.15s;
+}
+.content {
+	padding-left: 12em;
+	width: 40em;
 }
 
-.content {
-	padding-left: 10em;
-	width: 40em;
+.URLForm {
+	width: 100%;
+}
+
+.panel {
+	width: 10em;
+	background-color: #26292E;
+	height: 100%;
+	position: fixed;
+}
+
+.panelContainer {
+	padding-top: 2em;
+}
+
+.panelTab {
+	padding-top: 1em;
+	padding-left: 1em;
+	padding-bottom: 1em;
+}
+
+.panelTab:hover {
+	cursor: pointer;
+	transition: background-color;
+	transition-duration: 0.15s;
+	background-color: grey;
+}
+.panelTab span {
+	color: #C1C1B4;
+	font: message-box;
+}
+
+.panelTabSelected {
+	background-color: grey;
+	border-style: none none none solid;
+	border-left-color: #DE5E60;
 }

@@ -8,7 +8,24 @@
 </head>
 
 <body>
-	<div class="content">
+	<div class="panel">
+		<div class="panelContainer">
+			<div id="tab1" class="panelTab panelTabSelected">
+				<span>History Settings</span>
+			</div>
+			<div id="tab2" class="panelTab">
+				<span>List of URLS</span>
+			</div>					
+		</div>
+	</div>
+
+	<div id="historySettingsContent" class="content" style="">
+		<h1>
+			History Settings
+		</h1>		
+	</div>
+
+	<div id="listOfURLSContent" class="content" style="display: none">
 		<h1>
 			List of URLS
 		</h1>
@@ -32,6 +49,7 @@
 		<button id="exportURLS">
 			<span>Export URLS</span>
 		</button>
+		<br>
 		<input type="file" id="CSVImport" accept=".csv" onchange="openCSV(event)">
 	</div>
 </body>

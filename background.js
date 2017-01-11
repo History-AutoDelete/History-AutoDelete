@@ -94,14 +94,14 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 Keep History for X days Logic
 */
 
-
-
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
 const STARTDATE = new Date(0);
 const DELAYINMINUTES = 60;
+
+//Keep History for X amount of days
 function deleteOldHistory() {
 	browser.storage.local.get("daysToKeep", function(results) {
 		browser.history.deleteRange({
@@ -109,33 +109,29 @@ function deleteOldHistory() {
 		    endTime: Date.now() - DAY*results.daysToKeep
 	    });
 	});
-	console.log("History cleared");
+	//console.log("History cleared");
 }
+
+//Creates an alarm that clears history every hour
 function createOldHistoryAlarm() {
 	browser.alarms.create("historyAutoDeleteAlarm", {
 		periodInMinutes: DELAYINMINUTES
 	});
 }
 
+//Deletes the alarm
+function deleteOldHistoryAlarm() {
+    //console.log("Deleted");
+   	browser.alarms.clear("historyAutoDeleteAlarm");	
+}
 browser.alarms.onAlarm.addListener(function(alarmInfo) {
 	deleteOldHistory();
 });
 
-
-
+//On startup clear history and create the alarm if the user selects this option
 browser.storage.local.get("keepHistorySetting", function(results) {
 	if(results.keepHistorySetting != null && results.keepHistorySetting == true) {
 		deleteOldHistory();
 		createOldHistoryAlarm();
 	}
-});
-
-browser.storage.onChanged.addListener(function(results) {
-    if(results.keepHistorySetting.newValue == true) {
-        deleteOldHistory();
-        createOldHistoryAlarm();
-    } else {
-    	console.log("Deleted");
-    	browser.alarms.clear("historyAutoDeleteAlarm");
-    }
 });

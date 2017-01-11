@@ -40,6 +40,7 @@ panelTabToContentMap.forEach(function(value, key, map) {
 browser.storage.local.get(function(results) {
     if(results.daysToKeep == null) {
         document.getElementById("dayInput").value = 60;
+        browser.storage.local.set({daysToKeep: document.getElementById("dayInput").value});
     } else {
         document.getElementById("dayInput").value = results.daysToKeep;
     }
@@ -49,16 +50,20 @@ browser.storage.local.get(function(results) {
     }
 });
 
-
+//Event handler for the checkbox to Keep History
 document.getElementById("keepHistorySwitch").addEventListener("CheckboxStateChange", function() {
     if(document.getElementById("keepHistorySwitch").checked) {
         browser.storage.local.set({keepHistorySetting: true});
+        page.deleteOldHistory();
+        page.createOldHistoryAlarm();
     } else {
         browser.storage.local.set({keepHistorySetting: false});
+        page.deleteOldHistoryAlarm();
     }
 
 });
 
+//Event handler for the X amount to days of history to keep
 document.getElementById("dayInput").addEventListener("change", function() {
     browser.storage.local.set({daysToKeep: document.getElementById("dayInput").value});
 });
@@ -100,9 +105,11 @@ function addURLFromInput() {
         page.addURL(page.get_hostname(URL));
         document.getElementById("URLForm").value = "";
         document.getElementById("URLForm").focus();  
+        generateTableOfURLS();   
     }   
 }
 
+//Import the CSV file
 function openCSV(event) {
     var reader = new FileReader();
     reader.onload = function(event) {
@@ -151,6 +158,7 @@ var page = browser.extension.getBackgroundPage();
 //Event handler for the Remove All button
 document.getElementById("clear").addEventListener("click", function() {
     page.clearURL();
+    generateTableOfURLS();
 });
 
 //Event handler for the user entering a URL through a form
@@ -163,17 +171,11 @@ document.getElementById("URLForm").addEventListener("keypress", function (e) {
       addURLFromInput();
     }
 });
-
+/*
 //Exports urls to a CSV file
 document.getElementById("exportURLS").addEventListener("click", function() {
     browser.storage.local.get("URLS", function(results) {
         downloadCSV(results.URLS);
     });
 });
-
-//Generate the table again when the local storage changes
-browser.storage.onChanged.addListener(function(results) {
-    if(results.URLS) {
-        generateTableOfURLS();     
-    }
-});
+*/

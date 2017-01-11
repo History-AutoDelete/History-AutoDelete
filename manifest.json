@@ -5,9 +5,17 @@
   "description": "Auto Delete Certain History",
   "homepage_url": "https://github.com/mrdokenny/History-AutoDelete",
   "browser_action": {
-    "default_icon": "icons/ic_history_black_24dp_2x.png",
-    "default_title": "History AutoDeleter",
+    "default_icon": {
+      "24": "icons/history_24.png",
+      "32": "icons/history_32.png",      
+      "48": "icons/history_48.png"     
+    },
+    "default_title": "History AutoDelete",
     "default_popup": "popup/popup.html"
+  },
+  "icons": {
+    "48": "icons/history_48.png",     
+    "128": "icons/history_128.png"
   },
 
   "options_ui": {
@@ -22,6 +30,6 @@
     "alarms"
   ],
   "manifest_version": 2,
-  "name": "History AutoDeleter",
-  "version": "0.5.1"
+  "name": "History AutoDelete",
+  "version": "0.6.0"
 }

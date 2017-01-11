@@ -15,7 +15,6 @@ function get_hostname(url) {
     } catch(e) {
     	console.log("Invalid URL");
     }
-
     // Strip "www." if the URL starts with it.
     hostname = hostname.replace(/^www\./, '');
     return hostname;
@@ -89,4 +88,54 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 		}
 	});
 
+});
+
+/*
+Keep History for X days Logic
+*/
+
+
+
+const SECOND = 1000;
+const MINUTE = 60 * SECOND;
+const HOUR = 60 * MINUTE;
+const DAY = 24 * HOUR;
+const STARTDATE = new Date(0);
+const DELAYINMINUTES = 60;
+function deleteOldHistory() {
+	browser.storage.local.get("daysToKeep", function(results) {
+		browser.history.deleteRange({
+		    startTime: STARTDATE,
+		    endTime: Date.now() - DAY*results.daysToKeep
+	    });
+	});
+	console.log("History cleared");
+}
+function createOldHistoryAlarm() {
+	browser.alarms.create("historyAutoDeleteAlarm", {
+		periodInMinutes: DELAYINMINUTES
+	});
+}
+
+browser.alarms.onAlarm.addListener(function(alarmInfo) {
+	deleteOldHistory();
+});
+
+
+
+browser.storage.local.get("keepHistorySetting", function(results) {
+	if(results.keepHistorySetting != null && results.keepHistorySetting == true) {
+		deleteOldHistory();
+		createOldHistoryAlarm();
+	}
+});
+
+browser.storage.onChanged.addListener(function(results) {
+    if(results.keepHistorySetting.newValue == true) {
+        deleteOldHistory();
+        createOldHistoryAlarm();
+    } else {
+    	console.log("Deleted");
+    	browser.alarms.clear("historyAutoDeleteAlarm");
+    }
 });

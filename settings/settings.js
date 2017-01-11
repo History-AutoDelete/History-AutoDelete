@@ -25,14 +25,44 @@ function panelSwitch(event) {
 var panelTabToContentMap = new Map();
 panelTabToContentMap.set(document.getElementById("tab1"), document.getElementById("historySettingsContent"));
 panelTabToContentMap.set(document.getElementById("tab2"), document.getElementById("listOfURLSContent"));
+panelTabToContentMap.set(document.getElementById("tab3"), document.getElementById("aboutContent"));
 
 //Set a click event for each tab in the Map
 panelTabToContentMap.forEach(function(value, key, map) {
     key.addEventListener("click", panelSwitch);
 });
+
+
 /*
     History Settings Logic
 */
+//Setting the values from local storage
+browser.storage.local.get(function(results) {
+    if(results.daysToKeep == null) {
+        document.getElementById("dayInput").value = 60;
+    } else {
+        document.getElementById("dayInput").value = results.daysToKeep;
+    }
+
+    if(results.keepHistorySetting != null) {
+        document.getElementById("keepHistorySwitch").checked = results.keepHistorySetting;
+    }
+});
+
+
+document.getElementById("keepHistorySwitch").addEventListener("CheckboxStateChange", function() {
+    if(document.getElementById("keepHistorySwitch").checked) {
+        browser.storage.local.set({keepHistorySetting: true});
+    } else {
+        browser.storage.local.set({keepHistorySetting: false});
+    }
+
+});
+
+document.getElementById("dayInput").addEventListener("change", function() {
+    browser.storage.local.set({daysToKeep: document.getElementById("dayInput").value});
+});
+
 
 /*
     List of URLS Logic
@@ -142,6 +172,8 @@ document.getElementById("exportURLS").addEventListener("click", function() {
 });
 
 //Generate the table again when the local storage changes
-browser.storage.onChanged.addListener(function() {
-    generateTableOfURLS();
+browser.storage.onChanged.addListener(function(results) {
+    if(results.URLS) {
+        generateTableOfURLS();     
+    }
 });

@@ -15,17 +15,27 @@
 			</div>
 			<div id="tab2" class="panelTab">
 				<span>List of URLS</span>
-			</div>					
+			</div>		
+			<div id="tab3" class="panelTab">
+				<span>About</span>
+			</div>							
 		</div>
 	</div>
 
 	<div id="historySettingsContent" class="content" style="">
 		<h1>
 			History Settings
-		</h1>		
+		</h1>
+
+			<label for="keepHistorySwitch">
+				<input type="checkbox" id="keepHistorySwitch">
+				<span>Keep History for</span>
+			</label>
+		<input id="dayInput" type="number">
+		<span>Day(s)</span>
 	</div>
 
-	<div id="listOfURLSContent" class="content" style="display: none">
+	<div id="listOfURLSContent" class="content" style="display: none;">
 		<h1>
 			List of URLS
 		</h1>
@@ -51,6 +61,13 @@
 		</button>
 		<br>
 		<input type="file" id="CSVImport" accept=".csv" onchange="openCSV(event)">
+	</div>
+
+	<div id="aboutContent" class="content" style="display: none;">
+		<h1>
+			About
+		</h1>
+		<p>Report issues <a href="https://github.com/mrdokenny/History-AutoDelete/issues">here</a></p>
 	</div>
 </body>
 

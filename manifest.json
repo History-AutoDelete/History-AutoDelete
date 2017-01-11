@@ -18,7 +18,8 @@
     "activeTab",
     "history",
     "tabs",
-    "storage"
+    "storage",
+    "alarms"
   ],
   "manifest_version": 2,
   "name": "History AutoDeleter",

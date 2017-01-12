@@ -65,6 +65,9 @@ document.getElementById("keepHistorySwitch").addEventListener("click", function(
 
 //Event handler for the X amount to days of history to keep
 document.getElementById("dayInput").addEventListener("change", function() {
+	if(document.getElementById("dayInput").value < 0) {
+		document.getElementById("dayInput").value = 0;
+	}
     browser.storage.local.set({daysToKeep: document.getElementById("dayInput").value});
 });
 

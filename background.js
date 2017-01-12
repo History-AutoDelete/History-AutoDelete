@@ -10,11 +10,7 @@ function onSuccess() {
 
 //Returns the host name of the url. Etc. "https://en.wikipedia.org/wiki/Cat" becomes en.wikipedia.org
 function get_hostname(url) {
-    try {
-		var hostname = new URL(url).hostname;
-    } catch(e) {
-    	console.log("Invalid URL");
-    }
+    var hostname = new URL(url).hostname;
     // Strip "www." if the URL starts with it.
     hostname = hostname.replace(/^www\./, '');
     return hostname;
@@ -77,13 +73,38 @@ browser.storage.local.get("URLS", function(results) {
 });
 browser.history.onVisited.addListener(onVisited);
 
-//Logic that controls what happens when you click on the browser action icon
+//Logic that controls when to disable the browser action
+function isAWebpage(URL) {
+	// if(URL.match(/^about:/)) {
+	// 	return false;
+	// }
+	// if(URL.match(/^moz-extension:/)) {
+	// 	return false;
+	// }
+	// if(URL.match(/^chrome:/)) {
+	// 	return false;
+	// }
+	// if(URL.match(/^chrome-extension:/)) {
+	// 	return false;
+	// }
+	// if(URL.match(/^vivaldi:/)) {
+	// 	return false;
+	// }
+	// return true;
+	if(URL.match(/^http:/) || URL.match(/^https:/)) {
+		return true;
+	}
+	return false;
+}
+
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 	browser.windows.getCurrent(function(windowInfo) {
-		if (!tab.url.match(/^about:/) && !windowInfo.incognito) {
-			browser.browserAction.enable(tab.id);
-		} else {
+		if (!isAWebpage(tab.url) || windowInfo.incognito) {
 			browser.browserAction.disable(tab.id);
+			browser.browserAction.setBadgeText({text: "X", tabId: tab.id});
+		} else {
+			browser.browserAction.enable(tab.id);
+			browser.browserAction.setBadgeText({text: "", tabId: tab.id});
 		}
 	});
 

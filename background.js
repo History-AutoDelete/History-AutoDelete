@@ -75,22 +75,6 @@ browser.history.onVisited.addListener(onVisited);
 
 //Logic that controls when to disable the browser action
 function isAWebpage(URL) {
-	// if(URL.match(/^about:/)) {
-	// 	return false;
-	// }
-	// if(URL.match(/^moz-extension:/)) {
-	// 	return false;
-	// }
-	// if(URL.match(/^chrome:/)) {
-	// 	return false;
-	// }
-	// if(URL.match(/^chrome-extension:/)) {
-	// 	return false;
-	// }
-	// if(URL.match(/^vivaldi:/)) {
-	// 	return false;
-	// }
-	// return true;
 	if(URL.match(/^http:/) || URL.match(/^https:/)) {
 		return true;
 	}

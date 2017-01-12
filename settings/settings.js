@@ -84,23 +84,6 @@ function clickRemoved(event) {
     }
 }
 
-//Export the list of URLS as a CSV file
-function downloadCSV(arr) {
-    var csv = "";
-    arr.forEach(function(row) {
-            csv += row;
-            csv += "\n";
-    });
- 
-    console.log(csv);
-    var hiddenElement = document.createElement('a');
-    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-    hiddenElement.target = '_blank';
-    hiddenElement.download = 'urls.csv';
-    document.body.appendChild(hiddenElement);
-    hiddenElement.click();
-}  
-
 //Add URL by keyboard input
 function addURLFromInput() {
     var input = document.getElementById("URLForm").value;
@@ -113,20 +96,24 @@ function addURLFromInput() {
     }   
 }
 
-//Import the CSV file
-function openCSV(event) {
-    var reader = new FileReader();
-    reader.onload = function(event) {
-        var contents = event.target.result;
-        console.log("File contents: " + contents);
-    };
+//Export the list of URLS as a text file
+function downloadTextFile(arr) {
+    var txt = "";
+    arr.forEach(function(row) {
+        txt += row;
+        txt += "\n";
+    });
+ 
+    //console.log(csv);
+    var hiddenElement = document.createElement('a');
+    hiddenElement.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(txt);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = 'urls.txt';
+    document.body.appendChild(hiddenElement);
+    hiddenElement.click();
+    document.body.removeChild(hiddenElement);
+}  
 
-    reader.onerror = function(event) {
-        console.error("File could not be read! Code " + event.target.error.code);
-    };
-
-    reader.readAsText(file);
-}
 
 //Generate the url table
 function generateTableOfURLS() {
@@ -175,11 +162,33 @@ document.getElementById("URLForm").addEventListener("keypress", function (e) {
       addURLFromInput();
     }
 });
-/*
-//Exports urls to a CSV file
+
+//Exports urls to a text file
 document.getElementById("exportURLS").addEventListener("click", function() {
     browser.storage.local.get("URLS", function(results) {
-        downloadCSV(results.URLS);
+        downloadTextFile(results.URLS);
     });
 });
-*/
+
+//Import URLS by text
+document.getElementById("importURLS").onchange = function() {
+	var file = this.files[0];
+
+	var reader = new FileReader();
+	reader.onload = function(progressEvent){
+	// Entire file
+	//console.log(this.result);
+
+	// By lines
+	var lines = this.result.split('\n');
+	for(var line = 0; line < lines.length; line++){
+	  //console.log(lines[line]);
+	  if(lines[line] != "") {
+	  	page.addURL(lines[line]);
+	  }
+	}
+	generateTableOfURLS();
+	};
+	reader.readAsText(file);
+};
+

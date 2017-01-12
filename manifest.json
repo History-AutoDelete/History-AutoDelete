@@ -1,6 +1,9 @@
 {
   "background": {
-    "scripts": ["background.js"]
+    "scripts": [
+	"browser-polyfill.js",
+	"background.js"
+	]
   },
   "description": "Auto Delete Certain History",
   "homepage_url": "https://github.com/mrdokenny/History-AutoDelete",

@@ -1,10 +1,16 @@
+body {
+	padding: .1em;
+}
+
 #top {
   border-bottom: 1px solid grey;
   min-height: 3.5em;
+  min-width: 4em;
 }
 #bottom {
   align-content: center;
   min-height: 3.5em;
+  min-width: 4em;
 }
 #settings {
   width: 2em;

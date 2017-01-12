@@ -1,37 +1,29 @@
-//Gets the active tab
-function getActiveTab() {
-	return browser.tabs.query({active: true, currentWindow: true});
-}
-
 //Fills the popup page
 function logTabs(tabs) {
-	for (tab of tabs) {
-		hostUrl = page.get_hostname(tab.url);
-		//Sets the Host site placeholder
-		document.getElementById("hostwebsite").innerHTML = hostUrl;
-		//Sets the checkbox depending on the if it exists in the set
-		if(page.hasHost(hostUrl)) {
-			switchToAutoDelete.checked = true; 
-		} else {
-			switchToAutoDelete.checked = false; 
-		}
+    var activeTab = tabs[0];
+	hostUrl = page.get_hostname(activeTab.url);
+	//Sets the Host site placeholder
+	document.getElementById("hostwebsite").innerHTML = hostUrl;
+	//Sets the checkbox depending on the if it exists in the set
+	if(page.hasHost(hostUrl)) {
+		switchToAutoDelete.checked = true; 
+	} else {
+		switchToAutoDelete.checked = false; 
 	}
+	
 }
 
-//Logs the error
-function onError(error) {
-	console.log(`Error: ${error}`);
-}
 
 //Initialize variables
 var hostUrl;
 var switchToAutoDelete = document.getElementById("switch1");
 var page = browser.extension.getBackgroundPage();
-var querying = browser.tabs.query({currentWindow: true, active: true});
-querying.then(logTabs, onError);
+browser.tabs.query({currentWindow: true, active: true}, logTabs);
+
 
 //Checkbox Event Handling
 function clickSwitchHandle() {
+		console.log("add");
 	if(switchToAutoDelete.checked) {
 		page.addURL(hostUrl);
 	} else {
@@ -40,13 +32,11 @@ function clickSwitchHandle() {
 	}
 	
 }
-switchToAutoDelete.addEventListener("CheckboxStateChange", clickSwitchHandle);
+switchToAutoDelete.addEventListener("click", clickSwitchHandle);
 
 //Setting Click Handling
 function clickSettings() {
-	var opening = browser.runtime.openOptionsPage();
-    opening.then(null, onError);
-	
+	browser.runtime.openOptionsPage();
 }
 
 document.getElementById("settings").addEventListener("click", clickSettings);

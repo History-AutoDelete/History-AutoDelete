@@ -28,8 +28,7 @@ function hasHost(url) {
 //Stores the set in the local storage of the browser as an array
 function storeLocal() {
 	var urlArray = Array.from(urlsToRemove);
-	var storeLocal = browser.storage.local.set({URLS: urlArray});
-	storeLocal.then(onSuccess, onError);
+	browser.storage.local.set({URLS: urlArray});
 }
 
 //Add the url to the set
@@ -74,7 +73,7 @@ var urlsToRemove;
 //Grabs the local storage's urls and initialize the set with it
 browser.storage.local.get("URLS", function(results) {
 	urlsToRemove = new Set(results.URLS);
-//	console.log(results.URLS);
+	//console.log(results.URLS);
 });
 browser.history.onVisited.addListener(onVisited);
 
@@ -98,18 +97,16 @@ const SECOND = 1000;
 const MINUTE = 60 * SECOND;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
-const STARTDATE = new Date(0);
 const DELAYINMINUTES = 60;
 
 //Keep History for X amount of days
 function deleteOldHistory() {
 	browser.storage.local.get("daysToKeep", function(results) {
-		browser.history.deleteRange({
-		    startTime: STARTDATE,
-		    endTime: Date.now() - DAY*results.daysToKeep
-	    });
+		browser.history.deleteRange({startTime: 0, endTime: Date.now() - DAY*results.daysToKeep} , function() {
+			//console.log("History cleared");
+		});
 	});
-	//console.log("History cleared");
+
 }
 
 //Creates an alarm that clears history every hour

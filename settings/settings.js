@@ -51,7 +51,7 @@ browser.storage.local.get(function(results) {
 });
 
 //Event handler for the checkbox to Keep History
-document.getElementById("keepHistorySwitch").addEventListener("CheckboxStateChange", function() {
+document.getElementById("keepHistorySwitch").addEventListener("click", function() {
     if(document.getElementById("keepHistorySwitch").checked) {
         browser.storage.local.set({keepHistorySetting: true});
         page.deleteOldHistory();
@@ -77,6 +77,7 @@ function clickRemoved(event) {
     if(event.target.classList.contains("removeIcon")) {
         //console.log(event.target.parentElement.textContent);
         page.removeURL(event.target.parentElement.textContent);
+		generateTableOfURLS();
     }
 }
 

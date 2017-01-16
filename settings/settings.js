@@ -1,20 +1,21 @@
+var page = browser.extension.getBackgroundPage();
 /*
-    Panel Logic
+    Sidebar Logic
 */
-//Switchs the panel
-function panelSwitch(event) {
+//Switchs the sidebar
+function sideBarSwitch(event) {
     var element = event.target;
     if(element.tagName == "SPAN") {
         element = element.parentElement;
     }
     //console.log(element);
-    if(panelTabToContentMap.has(element)) {
-        panelTabToContentMap.forEach(function(value, key, map) {         
+    if(sideBarTabToContentMap.has(element)) {
+        sideBarTabToContentMap.forEach(function(value, key, map) {         
             if(element == key) {
-                key.classList.add("panelTabSelected");
+                key.classList.add("pure-menu-selected");
                 value.style.display = 'block';
             } else {
-                key.classList.remove("panelTabSelected"); 
+                key.classList.remove("pure-menu-selected"); 
                 value.style.display = 'none';
             }
         }); 
@@ -22,55 +23,67 @@ function panelSwitch(event) {
 }
 
 //Map that stores the tab to the corresponding content
-var panelTabToContentMap = new Map();
-panelTabToContentMap.set(document.getElementById("tab1"), document.getElementById("historySettingsContent"));
-panelTabToContentMap.set(document.getElementById("tab2"), document.getElementById("listOfURLSContent"));
-panelTabToContentMap.set(document.getElementById("tab3"), document.getElementById("aboutContent"));
+var sideBarTabToContentMap = new Map();
+sideBarTabToContentMap.set(document.getElementById("tabWelcome"), document.getElementById("welcomeContent"));
+sideBarTabToContentMap.set(document.getElementById("tabSettings"), document.getElementById("historySettingsContent"));
+sideBarTabToContentMap.set(document.getElementById("tabURLList"), document.getElementById("listOfURLSContent"));
+sideBarTabToContentMap.set(document.getElementById("tabAbout"), document.getElementById("aboutContent"));
 
 //Set a click event for each tab in the Map
-panelTabToContentMap.forEach(function(value, key, map) {
-    key.addEventListener("click", panelSwitch);
+sideBarTabToContentMap.forEach(function(value, key, map) {
+    key.addEventListener("click", sideBarSwitch);
 });
-
+document.getElementById("tabWelcome").click();
 
 /*
     History Settings Logic
 */
 //Setting the values from local storage
-browser.storage.local.get(function(results) {
-    if(results.daysToKeep == null) {
-        document.getElementById("dayInput").value = 60;
-        browser.storage.local.set({daysToKeep: document.getElementById("dayInput").value});
-    } else {
-        document.getElementById("dayInput").value = results.daysToKeep;
-    }
+function restoreSettingValues() {
+    var getStorage = browser.storage.local.get();
+    getStorage.then(function(results) {
+        if(results.daysToKeep == null) {
+            document.getElementById("dayInput").value = 60;
+            browser.storage.local.set({daysToKeep: document.getElementById("dayInput").value});
+        } else {
+            document.getElementById("dayInput").value = results.daysToKeep;
+        }
 
-    if(results.keepHistorySetting != null) {
-        document.getElementById("keepHistorySwitch").checked = results.keepHistorySetting;
-    }
-});
+        if(results.keepHistorySetting != null) {
+            document.getElementById("keepHistorySwitch").checked = results.keepHistorySetting;
+        }
 
-//Event handler for the checkbox to Keep History
-document.getElementById("keepHistorySwitch").addEventListener("click", function() {
+        if(results.statLoggingSetting == null) {
+            document.getElementById("statLoggingSwitch").checked = true;
+            browser.storage.local.set({statLoggingSetting: document.getElementById("statLoggingSwitch").checked});
+        } else {
+            document.getElementById("statLoggingSwitch").checked = results.statLoggingSetting;
+        }
+    });
+}
+
+function saveSettingsValues() {
+    browser.storage.local.set({daysToKeep: document.getElementById("dayInput").value});
+
     if(document.getElementById("keepHistorySwitch").checked) {
         browser.storage.local.set({keepHistorySetting: true});
-        page.deleteOldHistory();
         page.createOldHistoryAlarm();
     } else {
         browser.storage.local.set({keepHistorySetting: false});
         page.deleteOldHistoryAlarm();
     }
 
-});
+    browser.storage.local.set({statLoggingSetting: document.getElementById("statLoggingSwitch").checked});
+}
+restoreSettingValues();
 
-//Event handler for the X amount to days of history to keep
-document.getElementById("dayInput").addEventListener("change", function() {
-	if(document.getElementById("dayInput").value < 0) {
-		document.getElementById("dayInput").value = 0;
-	}
-    browser.storage.local.set({daysToKeep: document.getElementById("dayInput").value});
-});
+document.getElementById("manualCleanup").addEventListener("click", page.deleteOldHistory);
 
+//document.getElementById("clearLog").addEventListener("click", page.deleteOldHistory);
+
+document.getElementById("saveSettings").addEventListener("click", saveSettingsValues);
+
+document.getElementById("cancelSettings").addEventListener("click", restoreSettingValues);
 
 /*
     List of URLS Logic
@@ -144,7 +157,6 @@ function generateTableOfURLS() {
 }
 
 generateTableOfURLS();
-var page = browser.extension.getBackgroundPage();
 
 //Event handler for the Remove All button
 document.getElementById("clear").addEventListener("click", function() {

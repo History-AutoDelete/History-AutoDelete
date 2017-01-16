@@ -1,12 +1,8 @@
 //Logs the error
 function onError(error) {
-	console.log(`Error: ${error}`);
+	console.error(`Error: ${error}`);
 }
 
-//Logs the success
-function onSuccess() {
-	//console.log("Success");
-}
 
 //Returns the host name of the url. Etc. "https://en.wikipedia.org/wiki/Cat" becomes en.wikipedia.org
 function get_hostname(url) {
@@ -59,6 +55,9 @@ function onVisited(historyItem) {
 		//console.log("Host: " + currentHostUrl);
 		if(hasHost(currentHostUrl)) {
 			var deletingUrl = browser.history.deleteUrl({url: currentUrl});
+			deletingUrl.then(function() {
+				console.log(currentURL + " deleted from history");
+			});
 		}
 	}
 
@@ -66,11 +65,13 @@ function onVisited(historyItem) {
 
 //The set of urls
 var urlsToRemove;
-//Grabs the local storage's urls and initialize the set with it
-browser.storage.local.get("URLS", function(results) {
-	urlsToRemove = new Set(results.URLS);
-	//console.log(results.URLS);
-});
+
+
+var getURLSFromStorage = browser.storage.local.get("URLS");
+getURLSFromStorage.then(function(item) {
+	urlsToRemove = new Set(item.URLS);
+}).catch(onError);
+
 browser.history.onVisited.addListener(onVisited);
 
 //Logic that controls when to disable the browser action
@@ -81,7 +82,7 @@ function isAWebpage(URL) {
 	return false;
 }
 
-browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+browser.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 	browser.windows.getCurrent(function(windowInfo) {
 		if (!isAWebpage(tab.url) || windowInfo.incognito) {
 			browser.browserAction.disable(tab.id);
@@ -126,7 +127,8 @@ function deleteOldHistoryAlarm() {
     //console.log("Deleted");
    	browser.alarms.clear("historyAutoDeleteAlarm");	
 }
-browser.alarms.onAlarm.addListener(function(alarmInfo) {
+
+browser.alarms.onAlarm.addListener(alarmInfo => {
 	deleteOldHistory();
 });
 

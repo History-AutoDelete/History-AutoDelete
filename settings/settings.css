@@ -1,11 +1,11 @@
-
+/*
 body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
 	position: fixed;
 }
-
+*/
 h1 {
     border-bottom: 1px solid grey;
     padding-bottom: 4px;
@@ -57,35 +57,36 @@ button:hover {
 	width: 100%;
 }
 
-.panel {
+#menu {
 	width: 10em;
 	background-color: #26292E;
 	height: 100%;
 	position: fixed;
 }
 
-.panelContainer {
+.pure-menu {
 	padding-top: 2em;
 }
 
-.panelTab {
+.pure-menu-item {
 	padding-top: 1em;
 	padding-left: 1em;
 	padding-bottom: 1em;
 }
 
-.panelTab:hover {
+.pure-menu-item:hover {
 	cursor: pointer;
 	transition: background-color;
 	transition-duration: 0.15s;
 	background-color: grey;
 }
-.panelTab span {
+.pure-menu-item span {
 	color: #C1C1B4;
 	font: message-box;
 }
 
-.panelTabSelected {
+.pure-menu-selected {
+	background: grey !important;
 	background-color: grey;
 	border-style: none none none solid;
 	border-left-color: #0288D1;

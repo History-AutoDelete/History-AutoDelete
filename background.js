@@ -63,7 +63,7 @@ function addURL(url) {
 		urlsToRemove.add(url);
 		storeLocal();
 	} else {
-		console.log("Already have " + url);
+		//console.log("Already have " + url);
 	}
 
 }
@@ -205,7 +205,7 @@ browser.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
 //Alarm event handler
 browser.alarms.onAlarm.addListener(function (alarmInfo) {
-	console.log(alarmInfo.name);
+	//console.log(alarmInfo.name);
 	if(alarmInfo.name == "historyAutoDeleteAlarm") {
 		deleteOldHistory();		
 	}

@@ -1,20 +1,37 @@
+var page = browser.extension.getBackgroundPage();
+
+//Show an alert and then fade out
+function toggleAlert(alert) {
+    alert.style.display = "block";
+    setTimeout(function() { 
+        alert.classList.add("fadeOut");
+    }, 800);    
+    setTimeout(function() { 
+        alert.style.display = "none";
+        alert.classList.remove("fadeOut"); 
+    }, 1800);
+
+
+}
+
+
 /*
-    Panel Logic
+    Sidebar Logic
 */
-//Switchs the panel
-function panelSwitch(event) {
+//Switchs the sidebar
+function sideBarSwitch(event) {
     var element = event.target;
     if(element.tagName == "SPAN") {
         element = element.parentElement;
     }
     //console.log(element);
-    if(panelTabToContentMap.has(element)) {
-        panelTabToContentMap.forEach(function(value, key, map) {         
+    if(sideBarTabToContentMap.has(element)) {
+        sideBarTabToContentMap.forEach(function(value, key, map) {         
             if(element == key) {
-                key.classList.add("panelTabSelected");
+                key.classList.add("pure-menu-selected");
                 value.style.display = 'block';
             } else {
-                key.classList.remove("panelTabSelected"); 
+                key.classList.remove("pure-menu-selected"); 
                 value.style.display = 'none';
             }
         }); 
@@ -22,53 +39,89 @@ function panelSwitch(event) {
 }
 
 //Map that stores the tab to the corresponding content
-var panelTabToContentMap = new Map();
-panelTabToContentMap.set(document.getElementById("tab1"), document.getElementById("historySettingsContent"));
-panelTabToContentMap.set(document.getElementById("tab2"), document.getElementById("listOfURLSContent"));
-panelTabToContentMap.set(document.getElementById("tab3"), document.getElementById("aboutContent"));
+var sideBarTabToContentMap = new Map();
+sideBarTabToContentMap.set(document.getElementById("tabWelcome"), document.getElementById("welcomeContent"));
+sideBarTabToContentMap.set(document.getElementById("tabSettings"), document.getElementById("historySettingsContent"));
+sideBarTabToContentMap.set(document.getElementById("tabURLList"), document.getElementById("listOfURLSContent"));
+sideBarTabToContentMap.set(document.getElementById("tabAbout"), document.getElementById("aboutContent"));
 
 //Set a click event for each tab in the Map
-panelTabToContentMap.forEach(function(value, key, map) {
-    key.addEventListener("click", panelSwitch);
+sideBarTabToContentMap.forEach(function(value, key, map) {
+    key.addEventListener("click", sideBarSwitch);
 });
+document.getElementById("tabWelcome").click();
 
+/*
+    Welcome Logic
+*/
+
+page.storeCounterToLocal();
+document.getElementById("sessionDeleted").textContent = page.historyDeletedCounter;
+document.getElementById("totalDeleted").textContent = page.historyDeletedCounterTotal;
 
 /*
     History Settings Logic
 */
 //Setting the values from local storage
-browser.storage.local.get(function(results) {
-    if(results.daysToKeep == null) {
-        document.getElementById("dayInput").value = 60;
-        browser.storage.local.set({daysToKeep: document.getElementById("dayInput").value});
-    } else {
-        document.getElementById("dayInput").value = results.daysToKeep;
-    }
+function restoreSettingValues() {
+    var getStorage = browser.storage.local.get();
+    getStorage.then(function(results) {
 
-    if(results.keepHistorySetting != null) {
-        document.getElementById("keepHistorySwitch").checked = results.keepHistorySetting;
-    }
-});
+        if(results.daysToKeep == null) {
+            document.getElementById("dayInput").value = 60;
+            browser.storage.local.set({daysToKeep: document.getElementById("dayInput").value});
+        } else {
+            document.getElementById("dayInput").value = results.daysToKeep;
+        }
 
-//Event handler for the checkbox to Keep History
-document.getElementById("keepHistorySwitch").addEventListener("click", function() {
+        if(results.keepHistorySetting != null) {
+            document.getElementById("keepHistorySwitch").checked = results.keepHistorySetting;
+        }
+
+        if(results.statLoggingSetting == null) {
+            document.getElementById("statLoggingSwitch").checked = true;
+            browser.storage.local.set({statLoggingSetting: document.getElementById("statLoggingSwitch").checked});
+        } else {
+            document.getElementById("statLoggingSwitch").checked = results.statLoggingSetting;
+        }
+    });
+}
+//Saving the values to local storage
+function saveSettingsValues() {
+    browser.storage.local.set({daysToKeep: document.getElementById("dayInput").value});
+
     if(document.getElementById("keepHistorySwitch").checked) {
         browser.storage.local.set({keepHistorySetting: true});
-        page.deleteOldHistory();
         page.createOldHistoryAlarm();
     } else {
         browser.storage.local.set({keepHistorySetting: false});
         page.deleteOldHistoryAlarm();
     }
 
+    browser.storage.local.set({statLoggingSetting: document.getElementById("statLoggingSwitch").checked});
+    page.initializeVariables();
+}
+restoreSettingValues();
+
+//Event handlers for the buttons
+document.getElementById("saveSettings").addEventListener("click", function() {
+    saveSettingsValues();
+    toggleAlert(document.getElementById("saveConfirm"));
 });
 
-//Event handler for the X amount to days of history to keep
-document.getElementById("dayInput").addEventListener("change", function() {
-	if(document.getElementById("dayInput").value < 0) {
-		document.getElementById("dayInput").value = 0;
-	}
-    browser.storage.local.set({daysToKeep: document.getElementById("dayInput").value});
+document.getElementById("cancelSettings").addEventListener("click", function() {
+    restoreSettingValues();
+    toggleAlert(document.getElementById("cancelConfirm"));
+});
+
+document.getElementById("manualCleanup").addEventListener("click", function() {
+    page.deleteOldHistory();
+    toggleAlert(document.getElementById("cleanupConfirm"));
+});
+
+document.getElementById("resetCounter").addEventListener("click", function() {
+    page.resetCounter();
+    toggleAlert(document.getElementById("resetCounterConfirm"));
 });
 
 
@@ -89,7 +142,7 @@ function addURLFromInput() {
     var input = document.getElementById("URLForm").value;
     if(input) {
         var URL = "http://www." + input;
-        page.addURL(page.get_hostname(URL));
+        page.addURL(page.getHostname(URL));
         document.getElementById("URLForm").value = "";
         document.getElementById("URLForm").focus();  
         generateTableOfURLS();   
@@ -144,7 +197,6 @@ function generateTableOfURLS() {
 }
 
 generateTableOfURLS();
-var page = browser.extension.getBackgroundPage();
 
 //Event handler for the Remove All button
 document.getElementById("clear").addEventListener("click", function() {

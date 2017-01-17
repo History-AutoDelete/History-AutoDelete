@@ -204,8 +204,9 @@ document.getElementById("URLForm").addEventListener("keypress", function (e) {
 
 //Exports urls to a text file
 document.getElementById("exportURLS").addEventListener("click", function() {
-    browser.storage.local.get("URLS", function(results) {
-        downloadTextFile(results.URLS);
+    browser.storage.local.get("URLS")
+	.then(function(items) {
+        downloadTextFile(items.URLS);
     });
 });
 

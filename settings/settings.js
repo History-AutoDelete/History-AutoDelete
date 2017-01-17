@@ -1,4 +1,20 @@
 var page = browser.extension.getBackgroundPage();
+
+//Show an alert and then fade out
+function toggleAlert(alert) {
+    alert.style.display = "block";
+    setTimeout(function() { 
+        alert.classList.add("fadeOut");
+    }, 800);    
+    setTimeout(function() { 
+        alert.style.display = "none";
+        alert.classList.remove("fadeOut"); 
+    }, 1800);
+
+
+}
+
+
 /*
     Sidebar Logic
 */
@@ -36,12 +52,21 @@ sideBarTabToContentMap.forEach(function(value, key, map) {
 document.getElementById("tabWelcome").click();
 
 /*
+    Welcome Logic
+*/
+
+page.storeCounterToLocal();
+document.getElementById("sessionDeleted").textContent = page.historyDeletedCounter;
+document.getElementById("totalDeleted").textContent = page.historyDeletedCounterTotal;
+
+/*
     History Settings Logic
 */
 //Setting the values from local storage
 function restoreSettingValues() {
     var getStorage = browser.storage.local.get();
     getStorage.then(function(results) {
+
         if(results.daysToKeep == null) {
             document.getElementById("dayInput").value = 60;
             browser.storage.local.set({daysToKeep: document.getElementById("dayInput").value});
@@ -61,7 +86,7 @@ function restoreSettingValues() {
         }
     });
 }
-
+//Saving the values to local storage
 function saveSettingsValues() {
     browser.storage.local.set({daysToKeep: document.getElementById("dayInput").value});
 
@@ -74,16 +99,31 @@ function saveSettingsValues() {
     }
 
     browser.storage.local.set({statLoggingSetting: document.getElementById("statLoggingSwitch").checked});
+    page.initializeVariables();
 }
 restoreSettingValues();
 
-document.getElementById("manualCleanup").addEventListener("click", page.deleteOldHistory);
+//Event handlers for the buttons
+document.getElementById("saveSettings").addEventListener("click", function() {
+    saveSettingsValues();
+    toggleAlert(document.getElementById("saveConfirm"));
+});
 
-//document.getElementById("clearLog").addEventListener("click", page.deleteOldHistory);
+document.getElementById("cancelSettings").addEventListener("click", function() {
+    restoreSettingValues();
+    toggleAlert(document.getElementById("cancelConfirm"));
+});
 
-document.getElementById("saveSettings").addEventListener("click", saveSettingsValues);
+document.getElementById("manualCleanup").addEventListener("click", function() {
+    page.deleteOldHistory();
+    toggleAlert(document.getElementById("cleanupConfirm"));
+});
 
-document.getElementById("cancelSettings").addEventListener("click", restoreSettingValues);
+document.getElementById("resetCounter").addEventListener("click", function() {
+    page.resetCounter();
+    toggleAlert(document.getElementById("resetCounterConfirm"));
+});
+
 
 /*
     List of URLS Logic
@@ -102,7 +142,7 @@ function addURLFromInput() {
     var input = document.getElementById("URLForm").value;
     if(input) {
         var URL = "http://www." + input;
-        page.addURL(page.get_hostname(URL));
+        page.addURL(page.getHostname(URL));
         document.getElementById("URLForm").value = "";
         document.getElementById("URLForm").focus();  
         generateTableOfURLS();   

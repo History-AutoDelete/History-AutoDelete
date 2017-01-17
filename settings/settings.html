@@ -35,7 +35,7 @@
 
 			<div id="welcomeContent">
 				<h1>Welcome</h1>
-				<p>Hi there! Since you last left, History AutoDelete has deleted <b>200</b> history entries and in total <b>1000</b>.</p>
+				<p>Hi there! During this session, History AutoDelete has deleted <b id="sessionDeleted">0</b> history entries and in total <b id="totalDeleted">0</b> entries.</p>
 			</div>
 
 			<div id="historySettingsContent">
@@ -59,23 +59,39 @@
 				<div class="row">
 					<div class="nine columns">
 						<input type="checkbox" id="statLoggingSwitch">
-						<span>Log Total History Deleted</span>
+						<span>Log Total Number Of History Deleted</span>
 					</div>
 					<div class="three columns">	
-						<button id="clearLogs">
-							<span>Clear Logs</span>
+						<button id="resetCounter">
+							<span>Reset Counter</span>
 						</button>
 					</div>
 					<br>
-
-					<br><br>				
+				</div>
+					<br><br>
+				<div class="row">			
 					<button id="saveSettings" class="button-primary">
 						<span>Save</span>
 					</button>
 					<button id="cancelSettings">
 						<span>Cancel</span>
-					</button>					
-				</div>
+					</button>
+
+					<div id="saveConfirm" class="alert success" style="display: none;">
+					  	<span class="closebtn">&times;</span>  
+					 	<strong>Saved!</strong>
+					</div>
+					<div id="cancelConfirm" class="alert warning" style="display: none;"> 
+					 	<strong>Restored Settings!</strong>
+					</div>
+					<div id="cleanupConfirm" class="alert success" style="display: none;">
+					 	<strong>Cleaned Old History!</strong>
+					</div>
+					<div id="resetCounterConfirm" class="alert success" style="display: none;">
+					 	<strong>Cleared Counter!</strong>
+					</div>
+				</div>					
+				
 			</div>
 
 			<div id="listOfURLSContent">

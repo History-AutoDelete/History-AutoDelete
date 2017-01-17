@@ -157,9 +157,11 @@ function downloadTextFile(arr) {
 //Generate the url table
 function generateTableOfURLS() {
     var tableContainerNode = document.getElementById('tableContainer');
+	/*
     while (tableContainerNode.firstChild) {
         tableContainerNode.removeChild(tableContainerNode.firstChild);
     }
+	*/
     browser.storage.local.get("URLS")
 	.then(function (result) {
         var array = result.URLS;
@@ -178,8 +180,12 @@ function generateTableOfURLS() {
             tr.appendChild(td);
             theTable.appendChild(tr);
         }
+		if(document.getElementById('tableContainer').hasChildNodes()) {
+			document.getElementById('tableContainer').firstChild.replaceWith(theTable);
+		} else {
+			document.getElementById('tableContainer').appendChild(theTable);			
+		}
 
-        document.getElementById('tableContainer').appendChild(theTable);
     });
 }
 

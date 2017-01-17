@@ -2,20 +2,19 @@ const SECOND = 1000;
 const MINUTE = 60 * SECOND;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
-const DELAYINMINUTES = 60;
 
 //Keep History for X amount of days
 function deleteOldHistory() {
-	browser.history.deleteRange({startTime: 0, endTime: Date.now() - (DAY*daysToKeep)} , function() {
-			//console.log("History cleared");
-	});
-
+	browser.storage.local.get("daysToKeep")
+	.then(function(items) {
+		browser.history.deleteRange({startTime: 0, endTime: Date.now() - (DAY*items.daysToKeep)});
+	}).catch(onError);
 }
 
 //Creates an alarm that clears history every hour
 function createOldHistoryAlarm() {
 	browser.alarms.create("historyAutoDeleteAlarm", {
-		periodInMinutes: DELAYINMINUTES
+		periodInMinutes: 60
 	});
 }
 
@@ -89,10 +88,10 @@ function onVisited(historyItem) {
 		//console.log(currentUrl);
 		//console.log("Host: " + currentHostUrl);
 		if(hasHost(currentHostUrl)) {
-			var deletingUrl = browser.history.deleteUrl({url: currentUrl});
-			deletingUrl.then(function() {
+			browser.history.deleteUrl({url: currentUrl})
+			.then(function() {
 				//console.log(currentURL + " deleted from history");
-			});
+			}).catch(onError);
 		}
 	}
 
@@ -100,15 +99,16 @@ function onVisited(historyItem) {
 
 //Increment the counter and store the counter to local after 1 minute
 function incrementCounter() {
-	if (statLoggingSetting == true) {
-		historyDeletedCounterTotal++;
-		historyDeletedCounter++;
-		browser.alarms.create("storeCounterToLocalAlarm", {
-			delayInMinutes: 1
-		});		
-		//console.log(historyDeletedCounterTotal);
-	}
-
+	browser.storage.local.get("statLoggingSetting")
+	.then(function(items) {
+		if(items.statLoggingSetting == true) {
+			historyDeletedCounterTotal++;
+			historyDeletedCounter++;
+			browser.alarms.create("storeCounterToLocalAlarm", {
+				delayInMinutes: 1
+			});
+		}
+	}).catch(onError);
 }
 
 //Resets the counter
@@ -123,32 +123,48 @@ function storeCounterToLocal() {
 	browser.storage.local.set({historyDeletedCounterTotal: historyDeletedCounterTotal});
 }
 
-//Set the variables from local storage
+//Set the variables from local storage, if it doesn't exist create it
 function initializeVariables() {
-	var getLocal = browser.storage.local.get();
-	getLocal.then(function(items) {
-		if(items.daysToKeep == null) {
-			setDefaults();
-		}
+	browser.storage.local.get()
+	.then(function(items) {
 		urlsToRemove = new Set(items.URLS);
-		daysToKeep = items.daysToKeep;
-		historyDeletedCounterTotal = items.historyDeletedCounterTotal;
-		keepHistorySetting = items.keepHistorySetting;
-		statLoggingSetting = items.statLoggingSetting;
-		//console.log(historyDeletedCounterTotal + ", " + keepHistorySetting + ", " + statLoggingSetting);
+		if(items.daysToKeep == null) {
+			browser.storage.local.set({daysToKeep: 60});
+		} else {
+			daysToKeep = items.daysToKeep;
+		}		
+		
+		if(items.historyDeletedCounterTotal == null) {
+			resetCounter();
+		} else {
+			historyDeletedCounterTotal = items.historyDeletedCounterTotal;
+		}		
+		
+		if(items.keepHistorySetting == null) {
+			browser.storage.local.set({keepHistorySetting: false});
+		} else {
+			daysToKeep = items.daysToKeep;
+		}		
+		
+		if(items.statLoggingSetting == null) {
+			browser.storage.local.set({statLoggingSetting: true});
+		}
+
 	}).catch(onError);
 }
 
 //Create some objects based on the values from initializing the variables
 function initializeObjects() {
-	if(keepHistorySetting != null && keepHistorySetting == true) {
-		deleteOldHistory();
-		createOldHistoryAlarm();
-	}
-
+	browser.storage.local.get("daysToKeep")
+	.then(function(items) {
+		if(items.keepHistorySetting == true) {
+			deleteOldHistory();
+			createOldHistoryAlarm();
+		}
+	}).catch(onError);
 }
 
-//Set the defaults if nothing appears in local storage
+//Set the defaults 
 function setDefaults() {
 	console.log("Set defaults");
 	browser.storage.local.set({
@@ -158,15 +174,13 @@ function setDefaults() {
 		statLoggingSetting: true
 	});
 }
+
 //The set of urls
 var urlsToRemove;
-//Numeric values
-var daysToKeep;
+
 var historyDeletedCounterTotal;
 var historyDeletedCounter = 0;
-//Boolean values
-var keepHistorySetting;
-var statLoggingSetting;
+
 initializeVariables();
 initializeObjects();
 
@@ -176,7 +190,8 @@ browser.history.onVisitRemoved.addListener(incrementCounter);
 
 //Logic that controls when to disable the browser action
 browser.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-	browser.windows.getCurrent(function(windowInfo) {
+	browser.windows.getCurrent()
+	.then(function(windowInfo) {
 		if (!isAWebpage(tab.url) || windowInfo.incognito) {
 			browser.browserAction.disable(tab.id);
 			browser.browserAction.setBadgeText({text: "X", tabId: tab.id});
@@ -184,7 +199,7 @@ browser.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 			browser.browserAction.enable(tab.id);
 			browser.browserAction.setBadgeText({text: "", tabId: tab.id});
 		}
-	});
+	}).catch(onError);
 
 });
 

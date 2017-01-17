@@ -1,5 +1,5 @@
 //Fills the popup page
-function logTabs(tabs) {
+function fillPopup(tabs) {
     var activeTab = tabs[0];
 	hostUrl = page.getHostname(activeTab.url);
 	//Sets the Host site placeholder
@@ -18,28 +18,24 @@ function logTabs(tabs) {
 var hostUrl;
 var switchToAutoDelete = document.getElementById("switch1");
 var page = browser.extension.getBackgroundPage();
-browser.tabs.query({currentWindow: true, active: true}, logTabs);
+browser.tabs.query({currentWindow: true, active: true})
+.then(fillPopup);
 
 
 //Checkbox Event Handling
-function clickSwitchHandle() {
-		console.log("add");
+switchToAutoDelete.addEventListener("click", function() {
 	if(switchToAutoDelete.checked) {
 		page.addURL(hostUrl);
 	} else {
 		page.removeURL(hostUrl);
 		
 	}
-	
-}
-switchToAutoDelete.addEventListener("click", clickSwitchHandle);
+});
 
 //Setting Click Handling
-function clickSettings() {
+document.getElementById("settings").addEventListener("click", function() {
 	browser.runtime.openOptionsPage();
-}
-
-document.getElementById("settings").addEventListener("click", clickSettings);
+});
 
 //Handler for clearing the history but will not be used because of #1
 // function clearAll(e) {

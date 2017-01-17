@@ -9,7 +9,7 @@ function toggleAlert(alert) {
     setTimeout(function() { 
         alert.style.display = "none";
         alert.classList.remove("fadeOut"); 
-    }, 1800);
+    }, 1700);
 
 
 }
@@ -64,26 +64,11 @@ document.getElementById("totalDeleted").textContent = page.historyDeletedCounter
 */
 //Setting the values from local storage
 function restoreSettingValues() {
-    var getStorage = browser.storage.local.get();
-    getStorage.then(function(results) {
-
-        if(results.daysToKeep == null) {
-            document.getElementById("dayInput").value = 60;
-            browser.storage.local.set({daysToKeep: document.getElementById("dayInput").value});
-        } else {
-            document.getElementById("dayInput").value = results.daysToKeep;
-        }
-
-        if(results.keepHistorySetting != null) {
-            document.getElementById("keepHistorySwitch").checked = results.keepHistorySetting;
-        }
-
-        if(results.statLoggingSetting == null) {
-            document.getElementById("statLoggingSwitch").checked = true;
-            browser.storage.local.set({statLoggingSetting: document.getElementById("statLoggingSwitch").checked});
-        } else {
-            document.getElementById("statLoggingSwitch").checked = results.statLoggingSetting;
-        }
+    browser.storage.local.get()
+    .then(function(items) {
+        document.getElementById("dayInput").value = items.daysToKeep;
+        document.getElementById("keepHistorySwitch").checked = items.keepHistorySetting;
+		document.getElementById("statLoggingSwitch").checked = items.statLoggingSetting;
     });
 }
 //Saving the values to local storage
@@ -99,8 +84,9 @@ function saveSettingsValues() {
     }
 
     browser.storage.local.set({statLoggingSetting: document.getElementById("statLoggingSwitch").checked});
-    page.initializeVariables();
+
 }
+
 restoreSettingValues();
 
 //Event handlers for the buttons
@@ -174,7 +160,8 @@ function generateTableOfURLS() {
     while (tableContainerNode.firstChild) {
         tableContainerNode.removeChild(tableContainerNode.firstChild);
     }
-    browser.storage.local.get("URLS", function (result) {
+    browser.storage.local.get("URLS")
+	.then(function (result) {
         var array = result.URLS;
         var arrayLength = array.length;
         var theTable = document.createElement('table');

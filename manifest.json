@@ -1,7 +1,7 @@
 {
   "background": {
     "scripts": [
-	"browser-polyfill.js",
+	"global_files/browser-polyfill.js",
 	"background.js"
 	]
   },
@@ -34,5 +34,5 @@
   ],
   "manifest_version": 2,
   "name": "History AutoDelete",
-  "version": "0.8.0"
+  "version": "0.8.1"
 }

@@ -116,9 +116,13 @@ document.getElementById("resetCounter").addEventListener("click", function() {
 */
 //Remove the url where the user clicked
 function clickRemoved(event) {
-    if(event.target.classList.contains("removeIcon")) {
-        //console.log(event.target.parentElement.textContent);
-        page.removeURL(event.target.parentElement.textContent);
+    if(event.target.classList.contains("removeButton")) {
+        var URL = event.target.parentElement.textContent;
+        //Slice the unicode times from the URL
+        URL = URL.slice(1);
+        URL = URL.trim();
+        //console.log(URL);
+        page.removeURL(URL);
 		generateTableOfURLS();
     }
 }
@@ -171,10 +175,10 @@ function generateTableOfURLS() {
         for (var i = 0, tr, td; i < arrayLength; i++) {
             tr = document.createElement('tr');
             td = document.createElement('td');
-            var removeButton =  new Image();
-            removeButton.classList.add("removeIcon");
-            removeButton.src = '../icons/close-circle.png';
+            var removeButton = document.createElement("span");
+            removeButton.classList.add("removeButton");
             removeButton.addEventListener("click", clickRemoved);
+            removeButton.innerHTML = "&times";
             td.appendChild(removeButton);
             td.appendChild(document.createTextNode(array[i]));
             tr.appendChild(td);

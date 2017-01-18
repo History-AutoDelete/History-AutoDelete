@@ -134,20 +134,24 @@ input[type="file"] {
 	background-color: #ff9800;
 }
 /* The close button */
-.closebtn {
-    margin-left: 15px;
+.removeButton {
+    /*
     color: white;
-    font-weight: bold;
     float: right;
-    font-size: 22px;
+    */
+    font-weight: bold;
+    font-size: 2em;
     line-height: 20px;
     cursor: pointer;
     transition: 0.3s;
+    box-sizing: border-box;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 /* When moving the mouse over the close button */
-.closebtn:hover {
-    color: black;
+.removeButton:hover {
+    color: grey;
 }
 
 .fadeOut {

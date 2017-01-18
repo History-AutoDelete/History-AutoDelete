@@ -2,6 +2,10 @@
 span {
   font-size: 1.9rem;
 }
+
+img {
+  margin-right: 5px;
+}
 #top {
   border-bottom: 1px solid grey;
   min-height: 3.5em;

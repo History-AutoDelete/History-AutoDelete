@@ -12,7 +12,7 @@ function fillPopup(tabs) {
 	faviconImage.style.height = "1em";
 	hostPlaceholder.appendChild(faviconImage);
 	//Sets the Host site placeholder
-	hostPlaceholder.appendChild(document.createTextNode(" " + hostUrl));
+	hostPlaceholder.appendChild(document.createTextNode(hostUrl));
 
 	//Sets the checkbox depending on the if it exists in the set
 	if(page.hasHost(hostUrl)) {

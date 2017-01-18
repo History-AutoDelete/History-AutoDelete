@@ -35,116 +35,156 @@
 
 			<div id="welcomeContent">
 				<h1>Welcome</h1>
+
 				<p>Hi there! During this session, History AutoDelete has deleted <b id="sessionDeleted">0</b> history entries and in total <b id="totalDeleted">0</b> entries. 
-				By the way, this settings page is responsive. Try resizing your browser.</p>
-			</div>
+					By the way, this settings page is responsive. Try resizing your browser.</p>
 
-			<div id="historySettingsContent">
-				<h1>History Settings</h1>
-				<div class="row">
-					<div class="nine columns">
-						<input type="checkbox" id="keepHistorySwitch">
-						<span>Keep History for</span>
-						<input id="dayInput" type="number" min="0">
-						<span>Day(s)</span>
+					<h2>Release Notes</h2>
+					<div class="row">
+						<div class="six columns">
+							<span>0.9.0</span>
+							<ul>
+								<li>Added release notes to the welcome screen</li>
+							</ul>
+							<span>0.8.0</span>
+							<ul>
+								<li>Responsive Settings Menu</li>
+								<li>Revamped visuals for Settings</li>
+								<li>Now this extension can count how many times the history got deleted</li>
+							</ul>
+							<span>0.7.0</span>
+							<ul>
+								<li>Added Export and Import URLS</li>
+								<li>Added Display when the icon is disabled(under pages that are not HTTP and HTTPS)</li>
+								<li>Fixed table not updating after clicking the remove icon</li>
+								<li>Fixed the Keep Days value from being set to a negative value</li>
+								<li>Fixed Compatibility with Chrome</li>
+							</ul>
+						</div>
+
+						<div class="six columns">
+							<span>0.6.0</span>
+							<ul>
+								<li>Settings Menu UI Revamped</li>
+								<li>New Blue Icons</li>
+								<li>New Feature: Keep History for X Days</li>
+								<li>Add URLS by Input</li>
+							</ul>
+							<span>0.5.1</span>
+							<ul>
+								<li>First Release Woo!</li>
+							</ul>
+						</div>
 					</div>
 
-					<div class="three columns">		
-						<button id="manualCleanup">
-							<span>Manual Cleanup</span>
-						</button>
+				</div>
+
+				<div id="historySettingsContent">
+					<h1>History Settings</h1>
+					<div class="row">
+						<div class="nine columns">
+							<input type="checkbox" id="keepHistorySwitch">
+							<span>Keep History for</span>
+							<input id="dayInput" type="number" min="0">
+							<span>Day(s)</span>
+						</div>
+
+						<div class="three columns">		
+							<button id="manualCleanup">
+								<span>Manual Cleanup</span>
+							</button>
+						</div>	
 					</div>	
-				</div>	
 
-				<br>
-				<div class="row">
-					<div class="nine columns">
-						<input type="checkbox" id="statLoggingSwitch">
-						<span>Log Total Number Of History Deleted</span>
-					</div>
-					<div class="three columns">	
-						<button id="resetCounter">
-							<span>Reset Counter</span>
-						</button>
-					</div>
 					<br>
-				</div>
+					<div class="row">
+						<div class="nine columns">
+							<input type="checkbox" id="statLoggingSwitch">
+							<span>Log Total Number Of History Deleted</span>
+						</div>
+						<div class="three columns">	
+							<button id="resetCounter">
+								<span>Reset Counter</span>
+							</button>
+						</div>
+						<br>
+					</div>
 					<br><br>
-				<div class="row">			
-					<button id="saveSettings" class="button-primary">
-						<span>Save</span>
-					</button>
-					<button id="cancelSettings">
-						<span>Cancel</span>
-					</button>
+					<div class="row">			
+						<button id="saveSettings" class="button-primary">
+							<span>Save</span>
+						</button>
+						<button id="cancelSettings">
+							<span>Cancel</span>
+						</button>
 
-					<div id="saveConfirm" class="alert success" style="display: none;">
-					 	<strong>Saved!</strong>
-					</div>
-					<div id="cancelConfirm" class="alert warning" style="display: none;"> 
-					 	<strong>Restored Settings!</strong>
-					</div>
-					<div id="cleanupConfirm" class="alert success" style="display: none;">
-					 	<strong>Cleaned Old History!</strong>
-					</div>
-					<div id="resetCounterConfirm" class="alert success" style="display: none;">
-					 	<strong>Cleared Counter!</strong>
-					</div>
-				</div>					
-				
-			</div>
-
-			<div id="listOfURLSContent">
-				<h1>
-					List of URLS
-				</h1>
-				<p>Enter URLS in the input without the "www." part, then press "Enter" or "Add URL". If unsure, go to the website and add it through the blue popup icon.</p>
-				<input id="URLForm" type="url">
-
-				<br>
-
-				<button id="add">
-					<span>Add URL</span>
-				</button>		
-				<button id="clear">
-					<span>Remove All</span>
-				</button>
-				<div id="tableContainer">
+						<div id="saveConfirm" class="alert success" style="display: none;">
+							<strong>Saved!</strong>
+						</div>
+						<div id="cancelConfirm" class="alert warning" style="display: none;"> 
+							<strong>Restored Settings!</strong>
+						</div>
+						<div id="cleanupConfirm" class="alert success" style="display: none;">
+							<strong>Cleaned Old History!</strong>
+						</div>
+						<div id="resetCounterConfirm" class="alert success" style="display: none;">
+							<strong>Cleared Counter!</strong>
+						</div>
+					</div>					
 
 				</div>
 
-				<span>Export URLS:</span><br>
-				<button id="exportURLS">
-					<span>Export URLS</span>
-				</button>
-				<br><br>
-				<span>Import URLS:</span><br>
-				<label class="file-upload">
-					<input id="importURLS" type="file"/>
-					Upload File
-				</label>
+				<div id="listOfURLSContent">
+					<h1>
+						List of URLS
+					</h1>
+					<p>Enter URLS in the input without the "www." part, then press "Enter" or "Add URL". If unsure, go to the website and add it through the blue popup icon.</p>
+					<input id="URLForm" type="url">
+
+					<br>
+
+					<button id="add">
+						<span>Add URL</span>
+					</button>		
+					<button id="clear">
+						<span>Remove All</span>
+					</button>
+					<div id="tableContainer">
+
+					</div>
+
+					<span>Export URLS:</span><br>
+					<button id="exportURLS">
+						<span>Export URLS</span>
+					</button>
+					<br><br>
+					<span>Import URLS:</span><br>
+					<label class="file-upload">
+						<input id="importURLS" type="file"/>
+						Upload File
+					</label>
+				</div>
+
+				<div id="aboutContent">
+					<h1>
+						About
+					</h1>
+					<p>Report issues and suggest features <a href="https://github.com/mrdokenny/History-AutoDelete/issues">here</a></p>
+					<p><br><br>Extension created by Kenny Do<br>
+						Frameworks Used: <a href="http://getskeleton.com/">Skeleton</a> and <a href="http://purecss.io/layouts/side-menu/#">Side Menu</a></p>
+					</div>
+
+
+				</div>
+
 			</div>
-
-			<div id="aboutContent">
-				<h1>
-					About
-				</h1>
-				<p>Report issues and suggest features <a href="https://github.com/mrdokenny/History-AutoDelete/issues">here</a></p>
-				<p><br><br>Extension created by Kenny Do<br>
-				Frameworks Used: <a href="http://getskeleton.com/">Skeleton</a> and <a href="http://purecss.io/layouts/side-menu/#">Side Menu</a></p>
-			</div>
-
-
 		</div>
 
-	</div>
-</div>
-
-<script type="text/javascript" src="../global_files/browser-polyfill.js"></script>
-<script type="text/javascript" src="ui.js"></script>		
-<script type="text/javascript" src="settings.js"></script>	
-</body>
+		<script type="text/javascript" src="../global_files/browser-polyfill.js"></script>
+		<script type="text/javascript" src="ui.js"></script>		
+		<script type="text/javascript" src="settings.js"></script>	
+	</body>
 
 
 
-</html>
+	</html>

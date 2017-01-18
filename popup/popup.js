@@ -2,8 +2,18 @@
 function fillPopup(tabs) {
     var activeTab = tabs[0];
 	hostUrl = page.getHostname(activeTab.url);
+	
+	var hostPlaceholder = document.getElementById("hostwebsite");
+
+	//Append the favicon image of the host site to the beggining of the URL
+	var faviconImage = new Image();
+	faviconImage.src = activeTab.favIconUrl;
+	faviconImage.style.width = "1em";
+	faviconImage.style.height = "1em";
+	hostPlaceholder.appendChild(faviconImage);
 	//Sets the Host site placeholder
-	document.getElementById("hostwebsite").innerHTML = hostUrl;
+	hostPlaceholder.appendChild(document.createTextNode(" " + hostUrl));
+
 	//Sets the checkbox depending on the if it exists in the set
 	if(page.hasHost(hostUrl)) {
 		switchToAutoDelete.checked = true; 
@@ -16,7 +26,7 @@ function fillPopup(tabs) {
 
 //Initialize variables
 var hostUrl;
-var switchToAutoDelete = document.getElementById("switch1");
+var switchToAutoDelete = document.getElementById("switchToAutoDelete");
 var page = browser.extension.getBackgroundPage();
 browser.tabs.query({currentWindow: true, active: true})
 .then(fillPopup);

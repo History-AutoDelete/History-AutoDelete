@@ -3,33 +3,35 @@
 <html>
 <head>
 	<link rel="stylesheet" href="popup.css">
-	<link rel="stylesheet" href="../global_files/normalize.css">	
+	<link rel="stylesheet" href="../global_files/normalize.css">
+	<link rel="stylesheet" href="../global_files/skeleton.css">
 	<meta charset="UTF-8"> 
 </head>
 <body>
+	<div class="container">
+		<div id="top">
 
-	<div id="top">
-		<p>Host Website:</p>
-		<p id="hostwebsite"></p>
-		<img src="../icons/settings.png" id="settings">
-	</div>
+			<div class="row">
+			<span><b>Host Website:</b></span>
 
-	<div id="bottom">
-		<p>
-			<label for="switch1">
-				<input type="checkbox" id="switch1">
-				<span>Delete Automatically?</span>
-			</label>
+			<img src="../icons/settings.png" id="settings" class="u-pull-right">
+			</div>
+
+			<div class="row">
+				<div id="hostwebsite"></div>
+			</div>
+		</div>
+		<div id="bottom">
+			<div class="row">
+
+				<label for="switchToAutoDelete">
+					<input type="checkbox" id="switchToAutoDelete">
+					<span>Delete History Automatically?</span>
+				</label>
 
 
-		</p>
-<!--
-		<p>
-			<button id="clear">
-				Clear All Traces of Host Site?
-			</button>
-		</p>
--->
+			</div>
+		</div>
 	</div>
 	<script type="text/javascript" src="../global_files/browser-polyfill.js"></script>
 	<script type="text/javascript" src="popup.js"></script>

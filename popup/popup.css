@@ -1,7 +1,7 @@
-body {
-	padding: .1em;
-}
 
+span {
+  font-size: 1.9rem;
+}
 #top {
   border-bottom: 1px solid grey;
   min-height: 3.5em;
@@ -12,22 +12,17 @@ body {
   min-height: 2em;
   min-width: 13em;
 }
+
 #settings {
   width: 2em;
   height: 2em;
-  position: absolute;
-  top: 0%;
-  right: 0%;
 }
+
 #settings:hover {
   cursor: pointer;
   filter: invert(50%);
 }
-#clear {
-  width: 100%;
-  height: 100%;
-  text-align: center;
-}
-#switch1:hover {
+
+#addURLSwitch:hover {
   cursor: pointer;
 }

@@ -5,7 +5,7 @@
 	"background.js"
 	]
   },
-  "description": "Auto Delete Certain History",
+  "description": "Control Your History! Choose to Auto Delete Certain History and/or Auto Clean Older History",
   "homepage_url": "https://github.com/mrdokenny/History-AutoDelete",
   "browser_action": {
     "default_icon": {

@@ -147,14 +147,27 @@ function downloadTextFile(arr) {
         txt += "\n";
     });
  
-    //console.log(csv);
+    //console.log(txt);
     var hiddenElement = document.createElement('a');
     hiddenElement.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(txt);
-    hiddenElement.target = '_blank';
+    hiddenElement.target = '_target';
     hiddenElement.download = 'urls.txt';
-    document.body.appendChild(hiddenElement);
-    hiddenElement.click();
-    document.body.removeChild(hiddenElement);
+
+    //Firefox just opens the text rather than downloading it. In Chrome the "else" block of code works.
+    //So this is a work around.
+    if(layoutEngine.vendor == "mozilla") {
+        hiddenElement.appendChild(document.createTextNode("Right click to save as"));
+        if(document.getElementById("saveAs").hasChildNodes()) {
+            document.getElementById("saveAs").firstChild.replaceWith(hiddenElement);
+        } else {
+            document.getElementById("saveAs").appendChild(hiddenElement);
+        }
+    } else {
+        document.body.appendChild(hiddenElement);
+        hiddenElement.click();
+        document.body.removeChild(hiddenElement);
+    }
+
 }  
 
 

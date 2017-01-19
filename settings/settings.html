@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="../global_files/normalize.css">
 	<link rel="stylesheet" href="../global_files/skeleton.css">
 	<link rel="stylesheet" href="settings.css">
+	<script type="text/javascript" src="../global_files/layout.engine.min.js"></script>
 </head>
 
 <body>
@@ -50,6 +51,7 @@
 								<li>Reasonable widths for inputs</li>
 								<li>Added tooltips</li>
 								<li>Fixed a bug where using the same file to import URLS after "Removing All" would not import again</li>
+								<li>Workaround for Firefox not downloading exported text files</li>
 							</ul>
 							<span>0.8.0</span>
 							<ul>
@@ -170,6 +172,7 @@
 					<button id="exportURLS">
 						<span>Export URLS</span>
 					</button>
+					<div id="saveAs"></div>
 					<br><br>
 					<span>Import URLS:</span><br>
 					<label class="file-upload">

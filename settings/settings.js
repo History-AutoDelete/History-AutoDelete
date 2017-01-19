@@ -221,7 +221,7 @@ document.getElementById("exportURLS").addEventListener("click", function() {
 });
 
 //Import URLS by text
-document.getElementById("importURLS").onchange = function() {
+document.getElementById("importURLS").addEventListener("change", function() {
 	var file = this.files[0];
 
 	var reader = new FileReader();
@@ -240,5 +240,8 @@ document.getElementById("importURLS").onchange = function() {
 	generateTableOfURLS();
 	};
 	reader.readAsText(file);
-};
+    //Reset the file uploaded
+    document.getElementById("importURLS").type = "";
+    document.getElementById("importURLS").type = "file";
+});
 

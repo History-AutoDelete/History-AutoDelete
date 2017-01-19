@@ -52,8 +52,8 @@ button:hover {
 	font-weight: bold;
 }
 
-.URLForm {
-	width: 100%;
+input[type="number"] {
+    width: 5em;
 }
 .file-upload {
   display: inline-block;
@@ -162,3 +162,42 @@ input[type="file"] {
    0% {opacity: 1;}
    100% {opacity: 0;} 
 } 
+
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    background-color: #757575;
+    display: inline-block;
+    border-radius: 30px;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    font-size: 16px;
+	font-weight: 700;
+	color: #F9F9F9;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+
+    max-width: 10em;
+    min-height: 5em;
+    background-color: grey;
+    color: #F9F9F9;
+    text-align: center;
+    padding: 5px 5px;
+    border-radius: 6px;
+    font-size: 80%;
+ 	position: fixed;
+
+    margin-left: -3em;
+    z-index: 2;
+}
+.tooltip:hover {
+    cursor: help;
+}
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}

@@ -1,6 +1,7 @@
 
 span {
   font-size: 1.9rem;
+  
 }
 
 span.userAction {
@@ -10,9 +11,7 @@ span.userAction {
 }
 
 label:hover {
-  /*
   background-color: #d3d3d3;
-  */
 }
 
 label {
@@ -34,7 +33,8 @@ img {
 
 .container {
 	padding: 0;
-	min-width: 13em;
+	min-width: 17em;
+	user-select: none;
 }
 
 
@@ -48,12 +48,22 @@ img {
   filter: invert(50%);
 }
 
-@keyframes fadeIt {
+@keyframes successAnimation {
   0%   { background-color: #4CAF50; }
   50%  { background-color: #4CAF50; }
   100% { background-color: #FFFFFF; }
 }
 
-.backgroundAnimated{    
-    animation: fadeIt 5s ease-in-out; 
+.successAnimated {    
+    animation: successAnimation 1.5s ease-in-out; 
+}
+
+@keyframes failureAnimation {
+  0%   { background-color: #f44336; }
+  50%  { background-color: #f44336; }
+  100% { background-color: #FFFFFF; }
+}
+
+.failureAnimated {    
+    animation: failureAnimation 1.5s ease-in-out; 
 }

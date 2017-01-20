@@ -1,3 +1,17 @@
+function animateSuccess(element) {
+	element.classList.add("successAnimated");
+	setTimeout(function() {
+		element.classList.remove("successAnimated");
+	},1500);
+}
+
+function animateFailure(element) {
+	element.classList.add("failureAnimated");
+	setTimeout(function() {
+		element.classList.remove("failureAnimated");
+	},1500);	
+}
+
 //Fills the popup page
 function fillPopup(tabs) {
     var activeTab = tabs[0];
@@ -52,7 +66,7 @@ document.getElementById("settings").addEventListener("click", function() {
 });
 
 //Clear all history for a domain
-document.getElementById('clearHistory').addEventListener('click', function() {
+document.getElementById('clearHistory').addEventListener('click', function(e) {
 	// Don't try and delete history when there's no hostname.
 	if (!hostUrl) {
 		return;
@@ -67,11 +81,18 @@ document.getElementById('clearHistory').addEventListener('click', function() {
     });
 
     searchingHistory.then(function(results) {
-    	for (k = 0; k < results.length; k++) {
-    		browser.history.deleteUrl({url: results[k].url});
-    	}
+		if(results.length > 0) {
+			for (k = 0; k < results.length; k++) {
+				browser.history.deleteUrl({url: results[k].url});
+			}
+			animateSuccess(document.getElementById('clearHistory'));
+		} else {
+			animateFailure(document.getElementById('clearHistory'));
+		}
+
     });
     e.preventDefault();
+	
 
-    document.getElementById('clearHistory').classList.add("backgroundAnimated");
+	
 });

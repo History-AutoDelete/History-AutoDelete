@@ -16,12 +16,13 @@ function createOldHistoryAlarm() {
 	browser.alarms.create("historyAutoDeleteAlarm", {
 		periodInMinutes: 60
 	});
+	//console.log("Created alarm");
 }
 
 //Deletes the alarm
 function deleteOldHistoryAlarm() {
-    //console.log("Deleted");
-   	browser.alarms.clear("historyAutoDeleteAlarm");	
+   	browser.alarms.clear("historyAutoDeleteAlarm");
+   	//console.log("Deleted alarm");
 }
 
 
@@ -123,11 +124,12 @@ function storeCounterToLocal() {
 	browser.storage.local.set({historyDeletedCounterTotal: historyDeletedCounterTotal});
 }
 
-//Set the variables from local storage, if it doesn't exist create it
-function initializeVariables() {
+//Sets up the background page on startup
+function onStartUp() {
 	browser.storage.local.get()
 	.then(function(items) {
 		urlsToRemove = new Set(items.URLS);
+		//Checks to see if these settings are in storage, if not create and set the default
 		if(items.daysToKeep == null) {
 			browser.storage.local.set({daysToKeep: 60});
 		} else {
@@ -150,29 +152,27 @@ function initializeVariables() {
 			browser.storage.local.set({statLoggingSetting: true});
 		}
 
-	}).catch(onError);
-}
-
-//Create some objects based on the values from initializing the variables
-function initializeObjects() {
-	browser.storage.local.get("daysToKeep")
-	.then(function(items) {
+		//Create objects based on settings
 		if(items.keepHistorySetting == true) {
 			deleteOldHistory();
 			createOldHistoryAlarm();
+		} else {
+			deleteOldHistoryAlarm();
+		}
+
+		if(items.statLoggingSetting == true) {
+			browser.history.onVisitRemoved.addListener(incrementCounter);
+		} else if(browser.history.onVisitRemoved.hasListener(incrementCounter)) {
+			browser.history.onVisitRemoved.removeListener(incrementCounter)
 		}
 	}).catch(onError);
 }
 
+
 //Set the defaults 
 function setDefaults() {
-	console.log("Set defaults");
-	browser.storage.local.set({
-		daysToKeep: 60,
-		historyDeletedCounterTotal: 0,
-		keepHistorySetting: false,
-		statLoggingSetting: true
-	});
+	browser.storage.local.clear();
+	onStartUp();
 }
 
 //The set of urls
@@ -181,12 +181,9 @@ var urlsToRemove;
 var historyDeletedCounterTotal;
 var historyDeletedCounter = 0;
 
-initializeVariables();
-initializeObjects();
-
-//History Event handler
+onStartUp();
 browser.history.onVisited.addListener(onVisited);
-browser.history.onVisitRemoved.addListener(incrementCounter);
+
 
 //Logic that controls when to disable the browser action
 browser.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {

@@ -75,16 +75,10 @@ function restoreSettingValues() {
 function saveSettingsValues() {
     browser.storage.local.set({daysToKeep: document.getElementById("dayInput").value});
 
-    if(document.getElementById("keepHistorySwitch").checked) {
-        browser.storage.local.set({keepHistorySetting: true});
-        page.createOldHistoryAlarm();
-    } else {
-        browser.storage.local.set({keepHistorySetting: false});
-        page.deleteOldHistoryAlarm();
-    }
+    browser.storage.local.set({keepHistorySetting: document.getElementById("keepHistorySwitch").checked});
 
     browser.storage.local.set({statLoggingSetting: document.getElementById("statLoggingSwitch").checked});
-
+    page.onStartUp();
 }
 
 restoreSettingValues();

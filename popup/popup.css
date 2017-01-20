@@ -10,7 +10,9 @@ span.userAction {
 }
 
 label:hover {
+  /*
   background-color: #d3d3d3;
+  */
 }
 
 label {
@@ -36,7 +38,6 @@ img {
 }
 
 
-
 #settings {
   width: 2em;
   height: 2em;
@@ -45,4 +46,14 @@ img {
 #settings:hover {
   cursor: pointer;
   filter: invert(50%);
+}
+
+@keyframes fadeIt {
+  0%   { background-color: #4CAF50; }
+  50%  { background-color: #4CAF50; }
+  100% { background-color: #FFFFFF; }
+}
+
+.backgroundAnimated{    
+    animation: fadeIt 5s ease-in-out; 
 }

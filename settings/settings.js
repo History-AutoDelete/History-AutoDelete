@@ -175,6 +175,9 @@ function generateTableOfURLS() {
 	*/
     browser.storage.local.get("URLS")
 	.then(function (result) {
+		if(!result.URLS) {
+			return;
+		}
         var array = result.URLS;
         var arrayLength = array.length;
         var theTable = document.createElement('table');

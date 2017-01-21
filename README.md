@@ -6,6 +6,7 @@ Control your history! This extension will let you pick a domain to be auto delet
 - Import and Export your list of domains
 - Keep history for X days (auto delete older history)
 - Counts the total number history deleted
+- Icon shows you how many times that domain's entries show up in your history
 - Clear all history for a domain on demand
 - Responsive and Sleek Settings Menu
 

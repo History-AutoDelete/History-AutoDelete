@@ -152,6 +152,10 @@ function onStartUp() {
 			browser.storage.local.set({statLoggingSetting: true});
 		}
 
+		if(items.showVisitsInIconSetting == null) {
+			browser.storage.local.set({showVisitsInIconSetting: true});
+		}
+
 		//Create objects based on settings
 		if(items.keepHistorySetting == true) {
 			deleteOldHistory();
@@ -184,19 +188,39 @@ var historyDeletedCounter = 0;
 onStartUp();
 browser.history.onVisited.addListener(onVisited);
 
+function showVisitsInBadge(tabURL,tabID) {
+	browser.history.search({
+    	text: getHostname(tabURL),
+    	maxResults: 1000000000,
+    	startTime: 0
+	}).then(function(results) {
+		browser.browserAction.setBadgeText({text: results.length.toString(), tabId: tabID});
+		browser.browserAction.setBadgeBackgroundColor({color: "#2685b8", tabId: tabID});
+	}).catch(onError);
+} 
 
 //Logic that controls when to disable the browser action
 browser.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-	browser.windows.getCurrent()
-	.then(function(windowInfo) {
-		if (!isAWebpage(tab.url) || windowInfo.incognito) {
-			browser.browserAction.disable(tab.id);
-			browser.browserAction.setBadgeText({text: "X", tabId: tab.id});
-		} else {
-			browser.browserAction.enable(tab.id);
-			browser.browserAction.setBadgeText({text: "", tabId: tab.id});
-		}
-	}).catch(onError);
+	if (tab.status == "complete") {
+		browser.windows.getCurrent()
+		.then(function(windowInfo) {
+			if (!isAWebpage(tab.url) || windowInfo.incognito) {
+				browser.browserAction.disable(tab.id);
+				browser.browserAction.setBadgeText({text: "X", tabId: tab.id});
+				browser.browserAction.setBadgeBackgroundColor({color: "red", tabId: tab.id});
+			} else {
+				browser.browserAction.enable(tab.id);
+				browser.browserAction.setBadgeText({text: "", tabId: tab.id});
+				browser.storage.local.get("showVisitsInIconSetting")
+				.then(function(items) {
+					if(items.showVisitsInIconSetting == true) {
+						showVisitsInBadge(tab.url, tab.id);
+					}	
+				});
+			}
+		}).catch(onError);
+	}
+
 
 });
 

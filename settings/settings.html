@@ -45,12 +45,14 @@
 						<div class="six columns">
 							<span>0.9.0</span>
 							<ul>
+								<li>New Feature: The Blue Icon shows you how many times that domain's entries show up in history</li>
+								<li>New Feature: "Clear All History for this Domain"</li>
+								<li>Added tooltips</li>
 								<li>Added release notes to the welcome screen</li>
+								<li>New colors for Icon Badge</li>
 								<li>Popup visual tweaks</li>
 								<li>Used Unicode times icon (&times;) for remove buttons</li>
 								<li>Reasonable widths for inputs</li>
-								<li>Added tooltips</li>
-								<li>New Feature: "Clear All History for this Domain"</li>
 								<li>Fixed a bug where using the same file to import URLS after "Removing All" would not import again</li>
 								<li>Workaround for Firefox not downloading exported text files</li>
 							</ul>
@@ -108,6 +110,7 @@
 					</div>	
 
 					<br>
+
 					<div class="row">
 						<div class="nine columns">
 							<input type="checkbox" id="statLoggingSwitch">
@@ -123,6 +126,15 @@
 						</div>
 						<br>
 					</div>
+
+					<div class="row">
+						<input type="checkbox" id="showVisitsInIconSwitch">
+						<span>Show Number of Visits In Browser Icon</span>
+						<div class="tooltip">?
+						  <span class="tooltiptext">Shows how many history entries that domain has in your history. Numbers will fluctuate if you have have older history automatically deleted.</span>
+						</div>	
+					</div>
+
 					<br><br>
 					<div class="row">			
 						<button id="saveSettings" class="button-primary">

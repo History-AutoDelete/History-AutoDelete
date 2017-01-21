@@ -20,11 +20,7 @@ function toggleAlert(alert) {
 */
 //Switchs the sidebar
 function sideBarSwitch(event) {
-    var element = event.target;
-    if(element.tagName == "SPAN") {
-        element = element.parentElement;
-    }
-    //console.log(element);
+    var element = event.currentTarget;
     if(sideBarTabToContentMap.has(element)) {
         sideBarTabToContentMap.forEach(function(value, key, map) {         
             if(element == key) {
@@ -69,6 +65,8 @@ function restoreSettingValues() {
         document.getElementById("dayInput").value = items.daysToKeep;
         document.getElementById("keepHistorySwitch").checked = items.keepHistorySetting;
 		document.getElementById("statLoggingSwitch").checked = items.statLoggingSetting;
+        document.getElementById("showVisitsInIconSwitch").checked = items.showVisitsInIconSetting;
+
     });
 }
 //Saving the values to local storage
@@ -78,6 +76,9 @@ function saveSettingsValues() {
     browser.storage.local.set({keepHistorySetting: document.getElementById("keepHistorySwitch").checked});
 
     browser.storage.local.set({statLoggingSetting: document.getElementById("statLoggingSwitch").checked});
+
+    browser.storage.local.set({showVisitsInIconSetting: document.getElementById("showVisitsInIconSwitch").checked});
+
     page.onStartUp();
 }
 

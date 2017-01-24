@@ -138,15 +138,11 @@ function onStartUp() {
 		
 		if(items.historyDeletedCounterTotal == null) {
 			resetCounter();
-		} else {
-			historyDeletedCounterTotal = items.historyDeletedCounterTotal;
-		}		
+		}	
 		
 		if(items.keepHistorySetting == null) {
 			browser.storage.local.set({keepHistorySetting: false});
-		} else {
-			daysToKeep = items.daysToKeep;
-		}		
+		} 
 		
 		if(items.statLoggingSetting == null) {
 			browser.storage.local.set({statLoggingSetting: true});

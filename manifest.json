@@ -20,7 +20,11 @@
     "48": "icons/history_48.png",     
     "128": "icons/history_128.png"
   },
-
+  "applications": {
+    "gecko": {
+      "id": "mrdokenny@gmail.com"
+    }
+  },
   "options_ui": {
   	"page": "settings/settings.html",
   	"open_in_tab" : true

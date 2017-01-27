@@ -82,7 +82,7 @@ document.getElementById('clearHistory').addEventListener('click', function(e) {
 
     searchingHistory.then(function(results) {
 		if(results.length > 0) {
-			for (k = 0; k < results.length; k++) {
+			for (let k = 0; k < results.length; k++) {
 				browser.history.deleteUrl({url: results[k].url});
 			}
 			animateSuccess(document.getElementById('clearHistory'));

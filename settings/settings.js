@@ -23,12 +23,12 @@ function sideBarSwitch(event) {
     var element = event.currentTarget;
     if(sideBarTabToContentMap.has(element)) {
         sideBarTabToContentMap.forEach(function(value, key, map) {         
-            if(element == key) {
+            if(element === key) {
                 key.classList.add("pure-menu-selected");
-                value.style.display = 'block';
+                value.style.display = "block";
             } else {
                 key.classList.remove("pure-menu-selected"); 
-                value.style.display = 'none';
+                value.style.display = "none";
             }
         }); 
     }
@@ -143,14 +143,14 @@ function downloadTextFile(arr) {
     });
  
     //console.log(txt);
-    var hiddenElement = document.createElement('a');
-    hiddenElement.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(txt);
-    hiddenElement.target = '_target';
-    hiddenElement.download = 'History_AutoDelete_URLS.txt';
+    var hiddenElement = document.createElement("a");
+    hiddenElement.href = "data:text/plain;charset=utf-8," + encodeURIComponent(txt);
+    hiddenElement.target = "_target";
+    hiddenElement.download = "icon_AutoDelete_URLS.txt";
 
     //Firefox just opens the text rather than downloading it. In Chrome the "else" block of code works.
     //So this is a work around.
-    if(layoutEngine.vendor == "mozilla") {
+    if(layoutEngine.vendor === "mozilla") {
         hiddenElement.appendChild(document.createTextNode("Right click to save as"));
         if(document.getElementById("saveAs").hasChildNodes()) {
             document.getElementById("saveAs").firstChild.replaceWith(hiddenElement);
@@ -168,7 +168,7 @@ function downloadTextFile(arr) {
 
 //Generate the url table
 function generateTableOfURLS() {
-    var tableContainerNode = document.getElementById('tableContainer');
+    var tableContainerNode = document.getElementById("tableContainer");
 	/*
     while (tableContainerNode.firstChild) {
         tableContainerNode.removeChild(tableContainerNode.firstChild);
@@ -181,11 +181,11 @@ function generateTableOfURLS() {
 		}
         var array = result.URLS;
         var arrayLength = array.length;
-        var theTable = document.createElement('table');
+        var theTable = document.createElement("table");
 
         for (var i = 0, tr, td; i < arrayLength; i++) {
-            tr = document.createElement('tr');
-            td = document.createElement('td');
+            tr = document.createElement("tr");
+            td = document.createElement("td");
             var removeButton = document.createElement("span");
             removeButton.classList.add("removeButton");
             removeButton.addEventListener("click", clickRemoved);
@@ -195,10 +195,10 @@ function generateTableOfURLS() {
             tr.appendChild(td);
             theTable.appendChild(tr);
         }
-		if(document.getElementById('tableContainer').hasChildNodes()) {
-			document.getElementById('tableContainer').firstChild.replaceWith(theTable);
+		if(tableContainerNode.hasChildNodes()) {
+			tableContainerNode.firstChild.replaceWith(theTable);
 		} else {
-			document.getElementById('tableContainer').appendChild(theTable);			
+			tableContainerNode.appendChild(theTable);			
 		}
 
     });
@@ -241,10 +241,10 @@ document.getElementById("importURLS").addEventListener("change", function() {
 	//console.log(this.result);
 
 	// By lines
-	var lines = this.result.split('\n');
+	var lines = this.result.split("\n");
 	for(var line = 0; line < lines.length; line++){
 	  //console.log(lines[line]);
-	  if(lines[line] != "") {
+	  if(lines[line] !== "") {
 	  	page.addURL(lines[line]);
 	  }
 	}

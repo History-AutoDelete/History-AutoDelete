@@ -36,7 +36,7 @@ function onError(error) {
 function getHostname(url) {
     var hostname = new URL(url).hostname;
     // Strip "www." if the URL starts with it.
-    hostname = hostname.replace(/^www\./, '');
+    hostname = hostname.replace(/^www\./, "");
     return hostname;
 }
 
@@ -81,7 +81,7 @@ function clearURL() {
 	storeLocal();
 }
 
-//Deletes the history if the set contains the history url's hostname
+//Deletes the history if the set contains the history url"s hostname
 function onVisited(historyItem) {
 	if (historyItem.url) {
 		var currentUrl = historyItem.url;
@@ -102,7 +102,7 @@ function onVisited(historyItem) {
 function incrementCounter() {
 	browser.storage.local.get("statLoggingSetting")
 	.then(function(items) {
-		if(items.statLoggingSetting == true) {
+		if(items.statLoggingSetting === true) {
 			historyDeletedCounterTotal++;
 			historyDeletedCounter++;
 			browser.alarms.create("storeCounterToLocalAlarm", {
@@ -130,40 +130,40 @@ function onStartUp() {
 	.then(function(items) {
 		urlsToRemove = new Set(items.URLS);
 		//Checks to see if these settings are in storage, if not create and set the default
-		if(items.daysToKeep == null) {
+		if(items.daysToKeep === null) {
 			browser.storage.local.set({daysToKeep: 60});
 		} else {
 			daysToKeep = items.daysToKeep;
 		}		
 		
-		if(items.historyDeletedCounterTotal == null) {
+		if(items.historyDeletedCounterTotal === null) {
 			resetCounter();
 		}	
 		
-		if(items.keepHistorySetting == null) {
+		if(items.keepHistorySetting === null) {
 			browser.storage.local.set({keepHistorySetting: false});
 		} 
 		
-		if(items.statLoggingSetting == null) {
+		if(items.statLoggingSetting === null) {
 			browser.storage.local.set({statLoggingSetting: true});
 		}
 
-		if(items.showVisitsInIconSetting == null) {
+		if(items.showVisitsInIconSetting === null) {
 			browser.storage.local.set({showVisitsInIconSetting: true});
 		}
 
 		//Create objects based on settings
-		if(items.keepHistorySetting == true) {
+		if(items.keepHistorySetting === true) {
 			deleteOldHistory();
 			createOldHistoryAlarm();
 		} else {
 			deleteOldHistoryAlarm();
 		}
 
-		if(items.statLoggingSetting == true) {
+		if(items.statLoggingSetting === true) {
 			browser.history.onVisitRemoved.addListener(incrementCounter);
 		} else if(browser.history.onVisitRemoved.hasListener(incrementCounter)) {
-			browser.history.onVisitRemoved.removeListener(incrementCounter)
+			browser.history.onVisitRemoved.removeListener(incrementCounter);
 		}
 	}).catch(onError);
 }
@@ -191,13 +191,13 @@ function showVisitsInBadge(tabURL,tabID) {
     	startTime: 0
 	}).then(function(results) {
 		browser.browserAction.setBadgeText({text: results.length.toString(), tabId: tabID});
-		browser.browserAction.setBadgeBackgroundColor({color: "#2685b8", tabId: tabID});
+		browser.browserAction.setBadgeBackgroundColor({color: "#e68d7d", tabId: tabID});
 	}).catch(onError);
 } 
 
 //Logic that controls when to disable the browser action
 browser.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-	if (tab.status == "complete") {
+	if (tab.status === "complete") {
 		browser.windows.getCurrent()
 		.then(function(windowInfo) {
 			if (!isAWebpage(tab.url) || windowInfo.incognito) {
@@ -209,7 +209,7 @@ browser.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 				browser.browserAction.setBadgeText({text: "", tabId: tab.id});
 				browser.storage.local.get("showVisitsInIconSetting")
 				.then(function(items) {
-					if(items.showVisitsInIconSetting == true) {
+					if(items.showVisitsInIconSetting === true) {
 						showVisitsInBadge(tab.url, tab.id);
 					}	
 				});
@@ -223,10 +223,10 @@ browser.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 //Alarm event handler
 browser.alarms.onAlarm.addListener(function (alarmInfo) {
 	//console.log(alarmInfo.name);
-	if(alarmInfo.name == "historyAutoDeleteAlarm") {
+	if(alarmInfo.name === "historyAutoDeleteAlarm") {
 		deleteOldHistory();		
 	}
-	if(alarmInfo.name == "storeCounterToLocalAlarm") {
+	if(alarmInfo.name === "storeCounterToLocalAlarm") {
 		storeCounterToLocal();
 	}
 

@@ -169,11 +169,7 @@ function downloadTextFile(arr) {
 //Generate the url table
 function generateTableOfURLS() {
     var tableContainerNode = document.getElementById("tableContainer");
-	/*
-    while (tableContainerNode.firstChild) {
-        tableContainerNode.removeChild(tableContainerNode.firstChild);
-    }
-	*/
+
     browser.storage.local.get("URLS")
 	.then(function (result) {
 		if(!result.URLS) {

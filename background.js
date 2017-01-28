@@ -41,7 +41,7 @@ function getHostname(url) {
 }
 
 function isAWebpage(URL) {
-	if(URL.match(/^http:/) || URL.match(/^https:/)) {
+	if(URL.match(/^http:/) || URL.match(/^https:/) || URL.match(/^moz-extension:/)) {
 		return true;
 	}
 	return false;
@@ -132,13 +132,13 @@ function onStartUp() {
 		//Checks to see if these settings are in storage, if not create and set the default
 		if(items.daysToKeep === null) {
 			browser.storage.local.set({daysToKeep: 60});
-		} else {
-			daysToKeep = items.daysToKeep;
-		}		
+		}
 		
 		if(items.historyDeletedCounterTotal === null) {
 			resetCounter();
-		}	
+		} else {
+			historyDeletedCounterTotal = items.historyDeletedCounterTotal;
+		}
 		
 		if(items.keepHistorySetting === null) {
 			browser.storage.local.set({keepHistorySetting: false});

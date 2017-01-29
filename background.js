@@ -41,7 +41,7 @@ function getHostname(url) {
 }
 
 function isAWebpage(URL) {
-	if(URL.match(/^http:/) || URL.match(/^https:/) || URL.match(/^moz-extension:/)) {
+	if(URL.match(/^http:/) || URL.match(/^https:/)) {
 		return true;
 	}
 	return false;
@@ -130,25 +130,25 @@ function onStartUp() {
 	.then(function(items) {
 		urlsToRemove = new Set(items.URLS);
 		//Checks to see if these settings are in storage, if not create and set the default
-		if(items.daysToKeep === null) {
+		if(items.daysToKeep === undefined) {
 			browser.storage.local.set({daysToKeep: 60});
 		}
 		
-		if(items.historyDeletedCounterTotal === null) {
+		if(items.historyDeletedCounterTotal === undefined) {
 			resetCounter();
 		} else {
 			historyDeletedCounterTotal = items.historyDeletedCounterTotal;
 		}
 		
-		if(items.keepHistorySetting === null) {
+		if(items.keepHistorySetting === undefined) {
 			browser.storage.local.set({keepHistorySetting: false});
 		} 
 		
-		if(items.statLoggingSetting === null) {
+		if(items.statLoggingSetting === undefined) {
 			browser.storage.local.set({statLoggingSetting: true});
 		}
 
-		if(items.showVisitsInIconSetting === null) {
+		if(items.showVisitsInIconSetting === undefined) {
 			browser.storage.local.set({showVisitsInIconSetting: true});
 		}
 

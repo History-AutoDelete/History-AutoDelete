@@ -14,7 +14,12 @@ function animateFailure(element) {
 
 //Fills the popup page
 function fillPopup(tabs) {
-
+    var activeTab = tabs[0];
+    if(!page.isAWebpage(activeTab.url)) {
+    	return;
+    }
+	hostUrl = page.getHostname(activeTab.url);
+	
 	//Sets the checkbox depending on the if it exists in the set
 	if(page.hasHost(hostUrl)) {
 		switchToAutoDelete.checked = true; 
@@ -22,12 +27,6 @@ function fillPopup(tabs) {
 		switchToAutoDelete.checked = false; 
 	}
 
-
-    var activeTab = tabs[0];
-    if(!page.isAWebpage(activeTab.url)) {
-    	return;
-    }
-	hostUrl = page.getHostname(activeTab.url);
 	
 	var hostPlaceholder = document.getElementById("hostwebsite");
 

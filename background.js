@@ -124,14 +124,32 @@ function storeCounterToLocal() {
 	browser.storage.local.set({historyDeletedCounterTotal: historyDeletedCounterTotal});
 }
 
+//Show how many history entries for a domain
+function showVisitsInBadge(tabURL,tabID) {
+	browser.history.search({
+    	text: getHostname(tabURL),
+    	maxResults: 1000000000,
+    	startTime: 0
+	}).then(function(results) {
+		browser.browserAction.setBadgeText({text: results.length.toString(), tabId: tabID});
+		browser.browserAction.setBadgeBackgroundColor({color: "#e68d7d", tabId: tabID});
+	}).catch(onError);
+} 
+
 //Sets up the background page on startup
 function onStartUp() {
+	
+	let promiseContainer = [];
 	browser.storage.local.get()
 	.then(function(items) {
-		urlsToRemove = new Set(items.URLS);
 		//Checks to see if these settings are in storage, if not create and set the default
+		if(items.URLS === undefined) {
+			urlsToRemove = new Set();
+		} else {
+			urlsToRemove = new Set(items.URLS);
+		}
 		if(items.daysToKeep === undefined) {
-			browser.storage.local.set({daysToKeep: 60});
+			promiseContainer.push(browser.storage.local.set({daysToKeep: 60}));
 		}
 		
 		if(items.historyDeletedCounterTotal === undefined) {
@@ -141,15 +159,15 @@ function onStartUp() {
 		}
 		
 		if(items.keepHistorySetting === undefined) {
-			browser.storage.local.set({keepHistorySetting: false});
+			promiseContainer.push(browser.storage.local.set({keepHistorySetting: false}));
 		} 
 		
 		if(items.statLoggingSetting === undefined) {
-			browser.storage.local.set({statLoggingSetting: true});
+			promiseContainer.push(browser.storage.local.set({statLoggingSetting: true}));
 		}
 
 		if(items.showVisitsInIconSetting === undefined) {
-			browser.storage.local.set({showVisitsInIconSetting: true});
+			promiseContainer.push(browser.storage.local.set({showVisitsInIconSetting: true}));
 		}
 
 		//Create objects based on settings
@@ -166,13 +184,26 @@ function onStartUp() {
 			browser.history.onVisitRemoved.removeListener(incrementCounter);
 		}
 	}).catch(onError);
+	console.log("2");
+	return Promise.all(promiseContainer)
+	.then(function() {
+		console.log("3");
+	});
 }
 
 
 //Set the defaults 
 function setDefaults() {
-	browser.storage.local.clear();
-	onStartUp();
+	let p1;
+	let p2 = browser.storage.local.clear()
+	.then(function() {
+		console.log("1");
+		p1 = onStartUp();
+	});
+	return Promise.all([p1, p2]).then(function() {
+		console.log("4");
+	});
+
 }
 
 //The set of urls
@@ -183,17 +214,6 @@ var historyDeletedCounter = 0;
 
 onStartUp();
 browser.history.onVisited.addListener(onVisited);
-
-function showVisitsInBadge(tabURL,tabID) {
-	browser.history.search({
-    	text: getHostname(tabURL),
-    	maxResults: 1000000000,
-    	startTime: 0
-	}).then(function(results) {
-		browser.browserAction.setBadgeText({text: results.length.toString(), tabId: tabID});
-		browser.browserAction.setBadgeBackgroundColor({color: "#e68d7d", tabId: tabID});
-	}).catch(onError);
-} 
 
 //Logic that controls when to disable the browser action
 browser.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {

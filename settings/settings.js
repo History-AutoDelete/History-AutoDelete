@@ -95,6 +95,17 @@ document.getElementById("cancelSettings").addEventListener("click", function() {
     toggleAlert(document.getElementById("cancelConfirm"));
 });
 
+document.getElementById("defaultSettings").addEventListener("click", function() {
+    page.setDefaults()
+    .then(function() {
+        console.log("5");
+        restoreSettingValues();
+        generateTableOfURLS();
+        toggleAlert(document.getElementById("defaultConfirm"));
+    });
+    
+});
+
 document.getElementById("manualCleanup").addEventListener("click", function() {
     page.deleteOldHistory();
     toggleAlert(document.getElementById("cleanupConfirm"));

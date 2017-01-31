@@ -1,3 +1,4 @@
+//Flash a green background if successfull
 function animateSuccess(element) {
 	element.classList.add("successAnimated");
 	setTimeout(function() {
@@ -5,6 +6,7 @@ function animateSuccess(element) {
 	},1500);
 }
 
+//Flash a red background if it failed or couldn't be done
 function animateFailure(element) {
 	element.classList.add("failureAnimated");
 	setTimeout(function() {
@@ -14,6 +16,7 @@ function animateFailure(element) {
 
 //Fills the popup page
 function fillPopup(tabs) {
+	//Get active tab
     var activeTab = tabs[0];
     if(!page.isAWebpage(activeTab.url)) {
     	return;
@@ -96,7 +99,4 @@ document.getElementById("clearHistory").addEventListener("click", function(e) {
 
     });
     e.preventDefault();
-	
-
-	
 });

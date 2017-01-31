@@ -54,6 +54,11 @@ document.getElementById("tabWelcome").click();
 page.storeCounterToLocal();
 document.getElementById("sessionDeleted").textContent = page.historyDeletedCounter;
 document.getElementById("totalDeleted").textContent = page.historyDeletedCounterTotal;
+if(layoutEngine.vendor === "mozilla") {
+    document.getElementById("reviewLink").href = "https://addons.mozilla.org/en-US/firefox/addon/history-autodelete/reviews/";
+} else if(layoutEngine.vendor === "webkit") {
+    document.getElementById("reviewLink").href = "https://chrome.google.com/webstore/detail/history-autodelete/bhfakmaiadhflpjloimlagikhodjiefj/reviews";
+}
 
 /*
     History Settings Logic
@@ -98,7 +103,6 @@ document.getElementById("cancelSettings").addEventListener("click", function() {
 document.getElementById("defaultSettings").addEventListener("click", function() {
     page.setDefaults()
     .then(function() {
-        console.log("5");
         restoreSettingValues();
         generateTableOfURLS();
         toggleAlert(document.getElementById("defaultConfirm"));

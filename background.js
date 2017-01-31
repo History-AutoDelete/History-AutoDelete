@@ -138,13 +138,14 @@ function showVisitsInBadge(tabURL,tabID) {
 
 //Sets up the background page on startup
 function onStartUp() {
-	
+	//Holds the promises that must be fulfilled before a promise is returned
 	let promiseContainer = [];
 	browser.storage.local.get()
 	.then(function(items) {
 		//Checks to see if these settings are in storage, if not create and set the default
 		if(items.URLS === undefined) {
 			urlsToRemove = new Set();
+			storeLocal();
 		} else {
 			urlsToRemove = new Set(items.URLS);
 		}
@@ -184,11 +185,7 @@ function onStartUp() {
 			browser.history.onVisitRemoved.removeListener(incrementCounter);
 		}
 	}).catch(onError);
-	console.log("2");
-	return Promise.all(promiseContainer)
-	.then(function() {
-		console.log("3");
-	});
+	return Promise.all(promiseContainer);
 }
 
 
@@ -197,12 +194,10 @@ function setDefaults() {
 	let p1;
 	let p2 = browser.storage.local.clear()
 	.then(function() {
-		console.log("1");
 		p1 = onStartUp();
 	});
-	return Promise.all([p1, p2]).then(function() {
-		console.log("4");
-	});
+	//Returns a promise once p1 and p2 is done
+	return Promise.all([p1, p2]);
 
 }
 
@@ -213,6 +208,8 @@ var historyDeletedCounterTotal;
 var historyDeletedCounter = 0;
 
 onStartUp();
+
+//Deletes the history on visit if in the set
 browser.history.onVisited.addListener(onVisited);
 
 //Logic that controls when to disable the browser action

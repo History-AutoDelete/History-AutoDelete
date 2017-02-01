@@ -138,8 +138,6 @@ function showVisitsInBadge(tabURL,tabID) {
 
 //Sets up the background page on startup
 function onStartUp() {
-	//Holds the promises that must be fulfilled before a promise is returned
-	let promiseContainer = [];
 	browser.storage.local.get()
 	.then(function(items) {
 		//Checks to see if these settings are in storage, if not create and set the default
@@ -150,7 +148,7 @@ function onStartUp() {
 			urlsToRemove = new Set(items.URLS);
 		}
 		if(items.daysToKeep === undefined) {
-			promiseContainer.push(browser.storage.local.set({daysToKeep: 60}));
+			browser.storage.local.set({daysToKeep: 60});
 		}
 		
 		if(items.historyDeletedCounterTotal === undefined) {
@@ -160,15 +158,15 @@ function onStartUp() {
 		}
 		
 		if(items.keepHistorySetting === undefined) {
-			promiseContainer.push(browser.storage.local.set({keepHistorySetting: false}));
+			browser.storage.local.set({keepHistorySetting: false});
 		} 
 		
 		if(items.statLoggingSetting === undefined) {
-			promiseContainer.push(browser.storage.local.set({statLoggingSetting: true}));
+			browser.storage.local.set({statLoggingSetting: true});
 		}
 
 		if(items.showVisitsInIconSetting === undefined) {
-			promiseContainer.push(browser.storage.local.set({showVisitsInIconSetting: true}));
+			browser.storage.local.set({showVisitsInIconSetting: true});
 		}
 
 		//Create objects based on settings
@@ -185,19 +183,15 @@ function onStartUp() {
 			browser.history.onVisitRemoved.removeListener(incrementCounter);
 		}
 	}).catch(onError);
-	return Promise.all(promiseContainer);
 }
 
 
 //Set the defaults 
 function setDefaults() {
-	let p1;
-	let p2 = browser.storage.local.clear()
+	browser.storage.local.clear()
 	.then(function() {
-		p1 = onStartUp();
+		onStartUp();
 	});
-	//Returns a promise once p1 and p2 is done
-	return Promise.all([p1, p2]);
 
 }
 

@@ -102,11 +102,14 @@ document.getElementById("cancelSettings").addEventListener("click", function() {
 
 document.getElementById("defaultSettings").addEventListener("click", function() {
     page.setDefaults()
-    .then(function() {
+    setTimeout(function() {
         restoreSettingValues();
         generateTableOfURLS();
         toggleAlert(document.getElementById("defaultConfirm"));
-    });
+    }, 500);
+        
+        
+
     
 });
 
@@ -161,7 +164,7 @@ function downloadTextFile(arr) {
     var hiddenElement = document.createElement("a");
     hiddenElement.href = "data:text/plain;charset=utf-8," + encodeURIComponent(txt);
     hiddenElement.target = "_target";
-    hiddenElement.download = "icon_AutoDelete_URLS.txt";
+    hiddenElement.download = "History_AutoDelete_URLS.txt";
 
     //Firefox just opens the text rather than downloading it. In Chrome the "else" block of code works.
     //So this is a work around.

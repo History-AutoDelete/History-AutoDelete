@@ -203,7 +203,7 @@ function generateTableOfURLS() {
             var removeButton = document.createElement("span");
             removeButton.classList.add("removeButton");
             removeButton.addEventListener("click", clickRemoved);
-            removeButton.innerHTML = "&times";
+            removeButton.appendChild(document.createTextNode("\u00D7"));
             td.appendChild(removeButton);
             td.appendChild(document.createTextNode(array[i]));
             tr.appendChild(td);

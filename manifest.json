@@ -1,6 +1,7 @@
 {
   "background": {
     "scripts": [
+  "global_files/browserDetect.js",      
 	"global_files/browser-polyfill.js",
 	"background.js"
 	]

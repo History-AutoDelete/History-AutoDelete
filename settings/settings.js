@@ -54,9 +54,9 @@ document.getElementById("tabWelcome").click();
 page.storeCounterToLocal();
 document.getElementById("sessionDeleted").textContent = page.historyDeletedCounter;
 document.getElementById("totalDeleted").textContent = page.historyDeletedCounterTotal;
-if(layoutEngine.vendor === "mozilla") {
+if(page.browserDetect() === "Firefox") {
     document.getElementById("reviewLink").href = "https://addons.mozilla.org/en-US/firefox/addon/history-autodelete/reviews/";
-} else if(layoutEngine.vendor === "webkit") {
+} else if(page.browserDetect() === "Chrome") {
     document.getElementById("reviewLink").href = "https://chrome.google.com/webstore/detail/history-autodelete/bhfakmaiadhflpjloimlagikhodjiefj/reviews";
 }
 
@@ -168,7 +168,7 @@ function downloadTextFile(arr) {
 
     //Firefox just opens the text rather than downloading it. In Chrome the "else" block of code works.
     //So this is a work around.
-    if(layoutEngine.vendor === "mozilla") {
+    if(page.browserDetect() === "Firefox") {
         hiddenElement.appendChild(document.createTextNode("Right click to save as"));
         if(document.getElementById("saveAs").hasChildNodes()) {
             document.getElementById("saveAs").firstChild.replaceWith(hiddenElement);

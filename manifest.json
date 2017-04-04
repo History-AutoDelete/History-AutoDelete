@@ -23,7 +23,8 @@
   },
   "applications": {
     "gecko": {
-      "id": "{7e79d10d-9667-4d38-838d-471281c568c3}"
+      "id": "{7e79d10d-9667-4d38-838d-471281c568c3}",
+      "strict_min_version": "50.0"
     }
   },
   "options_ui": {

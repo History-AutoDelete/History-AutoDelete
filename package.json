@@ -1,0 +1,33 @@
+{
+  "name": "history-autodelete",
+  "version": "1.0.0",
+  "description": "Control your history! This extension will let you pick a domain to be auto deleted from history. Useful for any site that likes to spawn a bunch of history entries (ex. Google Maps or Google Translate). Also you choose how long to keep history.",
+  "main": "background.js",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "coveralls": "^2.13.1",
+    "eslint": "^3.19.0",
+    "eslint-plugin-json": "^1.2.0",
+    "eslint-plugin-mocha": "^4.11.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.4.2",
+    "sinon": "^2.3.1",
+    "sinon-chrome": "^2.2.1",
+    "webpack": "^2.6.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrdokenny/History-AutoDelete.git"
+  },
+  "author": "Kenny Do",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mrdokenny/History-AutoDelete/issues"
+  },
+  "homepage": "https://github.com/mrdokenny/History-AutoDelete#readme"
+}

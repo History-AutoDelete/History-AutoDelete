@@ -34,7 +34,7 @@ const actions = {
   RESET_HISTORY_DELETED_COUNTER: resetHistoryDeletedCounter
 };
 
-export default (state) => createBackgroundStore({
+export default (state = {}) => createBackgroundStore({
      store: createStore(reducer, state, applyMiddleware(thunk, consoleMessages)),
      actions
  });

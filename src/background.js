@@ -12,7 +12,13 @@ let currentSettings;
 
 const onStartUp = async() => {
 	const stateObject = await browser.storage.local.get("state");
-	store = createStore(JSON.parse(stateObject.state));
+	let stateFromStorage;
+	if(stateObject.state !== undefined) {
+		stateFromStorage = JSON.parse(stateObject.state);
+	} else {
+		stateFromStorage = {};
+	}
+	store = createStore(stateFromStorage);
 	currentSettings = store.getState().settings;
 	store.subscribe(onSettingsChange);
 	store.subscribe(saveToStorage);

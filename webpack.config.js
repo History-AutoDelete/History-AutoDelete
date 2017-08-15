@@ -34,7 +34,7 @@ const backgroundConfig = {
   },
   output: {
       path: `${__dirname}/extension`,
-      filename: "background.js",
+      filename: "backgroundBundle.js",
   },
   externals: {
       // "node/npm module name": "name of exported library variable"

@@ -7,7 +7,7 @@
 	"global_files/redux-thunk.js",
 	"global_files/redux-webext.js",
 	"global_files/shortid.js",
-	"background.js"
+	"backgroundBundle.js"
 	]
   },
   "description": "Control Your History! Choose to Auto Delete Certain History and/or Auto Clean Older History",

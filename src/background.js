@@ -1,245 +1,131 @@
+import createStore from './redux/Store';
+import { getHostname, isAWebpage, spliceWWW } from './libs';
+import { incrementHistoryDeletedCounter, updateSetting, addExpression } from './redux/Actions'
+
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
 
-//Keep History for X amount of days
-function deleteOldHistory() {
-	browser.storage.local.get("daysToKeep")
-	.then(function(items) {
-		browser.history.deleteRange({startTime: 0, endTime: Date.now() - (DAY*items.daysToKeep)});
-	}).catch(onError);
+let store;
+let currentSettings;
+
+const onStartUp = async() => {
+	const stateObject = await browser.storage.local.get("state");
+	store = createStore(JSON.parse(stateObject.state));
+	currentSettings = store.getState().settings;
+	store.subscribe(onSettingsChange);
+	store.subscribe(saveToStorage);
+	migration();
+  if(getSetting("keepHistory")) {
+    console.log("Created alarm");
+    createOldHistoryAlarm();
+    deleteOldHistory();
+  }
 }
-
-//Creates an alarm that clears history every hour
-function createOldHistoryAlarm() {
-	browser.alarms.create("historyAutoDeleteAlarm", {
-		periodInMinutes: 60
-	});
-	//console.log("Created alarm");
-}
-
-//Deletes the alarm
-function deleteOldHistoryAlarm() {
-   	browser.alarms.clear("historyAutoDeleteAlarm");
-   	//console.log("Deleted alarm");
-}
-
-
-//Logs the error
-function onError(error) {
-	console.error(`Error: ${error}`);
-}
-
-
-//Returns the host name of the url. Etc. "https://en.wikipedia.org/wiki/Cat" becomes en.wikipedia.org
-function getHostname(url) {
-    var hostname = new URL(url).hostname;
-    // Strip "www." if the URL starts with it.
-    hostname = hostname.replace(/^www\./, "");
-    return hostname;
-}
-
-function isAWebpage(URL) {
-	if(URL.match(/^http:/) || URL.match(/^https:/)) {
-		return true;
-	}
-	return false;
-}
-
-//See if the set has the url
-function hasHost(url) {
-	return urlsToRemove.has(url);
-}
-
-//Stores the set in the local storage of the browser as an array
-function storeLocal() {
-	var urlArray = Array.from(urlsToRemove);
-	browser.storage.local.set({URLS: urlArray});
-}
-
-//Add the url to the set
-function addURL(url) {
-	if(!hasHost(url)) {
-		urlsToRemove.add(url);
-		storeLocal();
-	} else {
-		//console.log("Already have " + url);
-	}
-
-}
-
-//Remove the url from the set
-function removeURL(url) {
-	urlsToRemove.delete(url);
-	storeLocal();
-}
-
-//Clears the set
-function clearURL() {
-	urlsToRemove.clear();
-	storeLocal();
-}
-
-//Deletes the history if the set contains the history url"s hostname
-function onVisited(historyItem) {
-	if (historyItem.url) {
-		var currentUrl = historyItem.url;
-		var currentHostUrl = getHostname(currentUrl);
-		//console.log(currentUrl);
-		//console.log("Host: " + currentHostUrl);
-		if(hasHost(currentHostUrl)) {
-			browser.history.deleteUrl({url: currentUrl})
-			.then(function() {
-				//console.log(currentURL + " deleted from history");
-			}).catch(onError);
-		}
-	}
-
-}
-
-//Increment the counter and store the counter to local after 1 minute
-function incrementCounter() {
-	browser.storage.local.get("statLoggingSetting")
-	.then(function(items) {
-		if(items.statLoggingSetting === true) {
-			historyDeletedCounterTotal++;
-			historyDeletedCounter++;
-			browser.alarms.create("storeCounterToLocalAlarm", {
-				delayInMinutes: 1
-			});
-		}
-	}).catch(onError);
-}
-
-//Resets the counter
-function resetCounter() {
-	browser.storage.local.set({historyDeletedCounterTotal: 0});
-	historyDeletedCounterTotal = 0;
-	historyDeletedCounter = 0;
-}
-
-//Stores the total history entries deleted to local
-function storeCounterToLocal() {
-	browser.storage.local.set({historyDeletedCounterTotal: historyDeletedCounterTotal});
-}
-
-//Show how many history entries for a domain
-function showVisitsInBadge(tabURL,tabID) {
-	browser.history.search({
-    	text: getHostname(tabURL),
-    	maxResults: 1000000000,
-    	startTime: 0
-	}).then(function(results) {
-		browser.browserAction.setBadgeText({text: results.length.toString(), tabId: tabID});
-		browser.browserAction.setBadgeBackgroundColor({color: "#e68d7d", tabId: tabID});
-	}).catch(onError);
-} 
-
-//Sets up the background page on startup
-function onStartUp() {
-	browser.storage.local.get()
-	.then(function(items) {
-		//Checks to see if these settings are in storage, if not create and set the default
-		if(items.URLS === undefined) {
-			urlsToRemove = new Set();
-			storeLocal();
-		} else {
-			urlsToRemove = new Set(items.URLS);
-		}
-		if(items.daysToKeep === undefined) {
-			browser.storage.local.set({daysToKeep: 60});
-		}
-		
-		if(items.historyDeletedCounterTotal === undefined) {
-			resetCounter();
-		} else {
-			historyDeletedCounterTotal = items.historyDeletedCounterTotal;
-		}
-		
-		if(items.keepHistorySetting === undefined) {
-			browser.storage.local.set({keepHistorySetting: false});
-		} 
-		
-		if(items.statLoggingSetting === undefined) {
-			browser.storage.local.set({statLoggingSetting: true});
-		}
-
-		if(items.showVisitsInIconSetting === undefined) {
-			browser.storage.local.set({showVisitsInIconSetting: true});
-		}
-
-		//Create objects based on settings
-		if(items.keepHistorySetting === true) {
-			deleteOldHistory();
-			createOldHistoryAlarm();
-		} else {
-			deleteOldHistoryAlarm();
-		}
-
-		if(items.statLoggingSetting === true) {
-			browser.history.onVisitRemoved.addListener(incrementCounter);
-		} else if(browser.history.onVisitRemoved.hasListener(incrementCounter)) {
-			browser.history.onVisitRemoved.removeListener(incrementCounter);
-		}
-	}).catch(onError);
-}
-
-
-//Set the defaults 
-function setDefaults() {
-	browser.storage.local.clear()
-	.then(function() {
-		onStartUp();
-	});
-
-}
-
-//The set of urls
-var urlsToRemove;
-
-var historyDeletedCounterTotal;
-var historyDeletedCounter = 0;
 
 onStartUp();
 
-//Deletes the history on visit if in the set
-browser.history.onVisited.addListener(onVisited);
+const saveToStorage = () => browser.storage.local.set({state: JSON.stringify(store.getState())});
 
-//Logic that controls when to disable the browser action
-browser.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-	if (tab.status === "complete") {
-		browser.windows.getCurrent()
-		.then(function(windowInfo) {
-			if (!isAWebpage(tab.url) || windowInfo.incognito) {
-				browser.browserAction.disable(tab.id);
-				browser.browserAction.setBadgeText({text: "X", tabId: tab.id});
-				browser.browserAction.setBadgeBackgroundColor({color: "red", tabId: tab.id});
-			} else {
-				browser.browserAction.enable(tab.id);
-				browser.browserAction.setBadgeText({text: "", tabId: tab.id});
-				browser.storage.local.get("showVisitsInIconSetting")
-				.then(function(items) {
-					if(items.showVisitsInIconSetting === true) {
-						showVisitsInBadge(tab.url, tab.id);
-					}	
-				});
-			}
-		}).catch(onError);
-	}
+const getSetting = (settingName) => store.getState().settings[settingName].value;
 
+//Keep History for X amount of days
+const deleteOldHistory = () => browser.history.deleteRange({startTime: 0, endTime: Date.now() - (DAY*getSetting("daysToKeep"))});
 
-});
 
 //Alarm event handler
-browser.alarms.onAlarm.addListener(function (alarmInfo) {
-	//console.log(alarmInfo.name);
+browser.alarms.onAlarm.addListener((alarmInfo) => {
 	if(alarmInfo.name === "historyAutoDeleteAlarm") {
-		deleteOldHistory();		
+		deleteOldHistory();
 	}
-	if(alarmInfo.name === "storeCounterToLocalAlarm") {
-		storeCounterToLocal();
-	}
-
 });
 
+const createOldHistoryAlarm = () => browser.alarms.create("historyAutoDeleteAlarm", {periodInMinutes: 60});
+
+
+const onSettingsChange = () => {
+  let previousSettings = currentSettings;
+  currentSettings = store.getState().settings;
+  if(currentSettings["keepHistory"].value && previousSettings["keepHistory"].value !== currentSettings["keepHistory"].value) {
+    createOldHistoryAlarm();
+    deleteOldHistory();
+    console.log("Created alarm");
+  } else if (!currentSettings["keepHistory"].value && previousSettings["keepHistory"].value !== currentSettings["keepHistory"].value) {
+    browser.alarms.clear("historyAutoDeleteAlarm");
+    console.log("Deleted alarm");
+  }
+}
+
+const migration = async() => {
+	const oldSettings = await browser.storage.local.get();
+	console.log(oldSettings);
+	if(Object.keys(oldSettings) !== 0 && oldSettings.migration_1 === undefined && oldSettings.keepHistorySetting !== undefined) {
+		store.dispatch(
+			updateSetting({payload: {name: "keepHistory", value: oldSettings.keepHistorySetting} })
+		);
+		store.dispatch(
+			updateSetting({payload: {name: "daysToKeep", value: oldSettings.daysToKeep}})
+		);
+		store.dispatch(
+			updateSetting({payload: {name: "statLogging", value: oldSettings.statLoggingSetting}})
+		);
+		store.dispatch(
+			updateSetting({payload: {name: "showVisitsInIcon", value: oldSettings.showVisitsInIconSetting}})
+		);
+		oldSettings.URLS.forEach((domain) => store.dispatch(addExpression({payload: {expression: `${domain}*`}})));
+		browser.storage.local.set({migration_1: true});
+	}
+}
+
+
+//Show how many history entries for a domain
+const showVisitsInBadge = async (tabURL,tabID) => {
+	const results = await browser.history.search({
+    	text: getHostname(tabURL),
+    	maxResults: 1000000000,
+    	startTime: 0
+	});
+  browser.browserAction.setBadgeText({text: results.length.toString(), tabId: tabID});
+  browser.browserAction.setBadgeBackgroundColor({color: "#e68d7d", tabId: tabID});
+}
+
+//Logic that controls when to disable the browser action
+browser.tabs.onUpdated.addListener( async (tabId, changeInfo, tab) => {
+	if (tab.status === "complete") {
+		const windowInfo = await browser.windows.getCurrent();
+		if (!isAWebpage(tab.url) || windowInfo.incognito) {
+			browser.browserAction.disable(tab.id);
+			browser.browserAction.setBadgeText({text: "X", tabId: tab.id});
+			browser.browserAction.setBadgeBackgroundColor({color: "red", tabId: tab.id});
+		} else {
+			browser.browserAction.enable(tab.id);
+			browser.browserAction.setBadgeText({text: "", tabId: tab.id});
+
+			if(getSetting("showVisitsInIcon")) {
+				showVisitsInBadge(tab.url, tab.id);
+			}
+		}
+
+	}
+});
+
+
+const findMatch = (url, expressionList) => {
+  return expressionList.some(expression => {
+    // Have to make a new RegExp to avoid mutating the one in the store after test
+    const regExpObj = new RegExp(expression.regExp);
+    return regExpObj.test(url);
+  });
+}
+
+//Deletes the history on visit if in the set
+browser.history.onVisited.addListener((historyItem) => {
+  const currentHostUrl = spliceWWW(historyItem.url);
+  if(findMatch(currentHostUrl, store.getState().expressions)) {
+		store.dispatch(
+			incrementHistoryDeletedCounter()
+		);
+    return browser.history.deleteUrl({url: historyItem.url});
+  }
+});

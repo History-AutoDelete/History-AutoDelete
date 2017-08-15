@@ -3,22 +3,39 @@
   "version": "1.0.0",
   "description": "Control your history! This extension will let you pick a domain to be auto deleted from history. Useful for any site that likes to spawn a bunch of history entries (ex. Google Maps or Google Translate). Also you choose how long to keep history.",
   "main": "background.js",
-  "dependencies": {},
+  "dependencies": {
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-redux": "^5.0.5",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0",
+    "redux-webext": "^1.1.2",
+    "reselect": "^3.0.1",
+    "shortid": "^2.2.8"
+  },
   "devDependencies": {
-    "chai": "^3.5.0",
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-react": "^6.24.1",
+    "chai": "^4.1.1",
     "coveralls": "^2.13.1",
-    "eslint": "^3.19.0",
+    "eslint": "^4.4.1",
     "eslint-plugin-json": "^1.2.0",
     "eslint-plugin-mocha": "^4.11.0",
     "eslint-plugin-promise": "^3.5.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.4.2",
-    "sinon": "^2.3.1",
+    "sinon": "^3.0.0",
     "sinon-chrome": "^2.2.1",
-    "webpack": "^2.6.1"
+    "webpack": "^3.4.1",
+    "webpack-bundle-analyzer": "^2.9.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack --config webpack.config.js --progress --colors --watch",
+    "build": "NODE_ENV=production webpack -p"
   },
   "repository": {
     "type": "git",

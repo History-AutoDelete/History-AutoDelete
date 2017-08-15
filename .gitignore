@@ -48,3 +48,5 @@ jspm_packages
 
 *.zip
 *.xpi
+report.html
+*Bundle.js

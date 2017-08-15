@@ -175,6 +175,7 @@ small screens.
     .menu-link:hover,
     .menu-link:focus {
         background: #000;
+        cursor: pointer;
     }
 
     .menu-link span {

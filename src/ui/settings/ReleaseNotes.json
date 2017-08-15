@@ -1,0 +1,65 @@
+{
+  "releases":[
+    {
+      "version": "1.1.0",
+      "notes": [
+        "Some code cleanup"
+      ]
+    },
+    {
+      "version": "1.0.0",
+      "notes": [
+        "Added Default Settings button in Settings",
+        "New custom icon and color theme!"
+      ]
+    },
+    {
+      "version": "0.9.0",
+      "notes": [
+        "New Feature: The Blue Icon shows you how many times that domain's entries show up in history",
+        "New Feature: 'Clear All History for this Domain'",
+        "Added tooltips",
+        "Added release notes to the welcome screen",
+        "New colors for Icon Badge",
+        "Popup visual tweaks",
+        "Used Unicode times icon (×) for remove buttons",
+        "Reasonable widths for inputs",
+        "Fixed a bug where using the same file to import URLS after 'Removing All' would not import again",
+        "Workaround for Firefox not downloading exported text files"
+      ]
+    },
+    {
+      "version": "0.8.0",
+      "notes": [
+        "Responsive Settings Menu",
+        "Revamped visuals for Settings",
+        "Now this extension can count how many times the history got deleted"
+      ]
+    },
+    {
+      "version": "0.7.0",
+      "notes": [
+        "Added Export and Import URLS",
+        "Added Display when the icon is disabled(under pages that are not HTTP and HTTPS)",
+        "Fixed table not updating after clicking the remove icon",
+        "Fixed the Keep Days value from being set to a negative value",
+        "Fixed Compatibility with Chrome"
+      ]
+    },
+    {
+      "version": "0.6.0",
+      "notes": [
+        "Settings Menu UI Revamped",
+        "New Blue Icons",
+        "New Feature: Keep History for X Days",
+        "Add URLS by Input"
+      ]
+    },
+    {
+      "version": "0.5.1",
+      "notes": [
+        "First Release!"
+      ]
+    }
+  ]
+}

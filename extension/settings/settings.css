@@ -1,13 +1,13 @@
 h1 {
     border-bottom: 1px solid grey;
     padding-bottom: 4px;
-	text-align: center;
+	  text-align: center;
 }
 
 td {
 	margin: 5px;
 	border-collapse: collapse;
-  	max-height: 10px;
+  max-height: 10px;
 }
 
 table {
@@ -23,12 +23,17 @@ button:hover {
 	cursor: pointer;
 }
 
+.cursorPoint:hover {
+  cursor: pointer;
+  filter: invert(50%);
+}
+
 #tableContainer {
 	margin-top: 2em;
 	margin-bottom: 2em;
 	height: 15em;
 	overflow: auto;
-	border: 1px solid black;	
+	border: 1px solid black;
 }
 
 .removeIcon {
@@ -56,23 +61,31 @@ input[type="number"] {
     width: 5em;
 }
 .file-upload {
-  display: inline-block;
-  height: 38px;
-  padding: 0 30px;
-  color: #555;
-  text-align: center;
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 38px;
-  letter-spacing: .1rem;
-  text-transform: uppercase;
+  color: #337ab7;
   text-decoration: none;
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.42857143;
+  text-align: center;
   white-space: nowrap;
-  background-color: transparent;
-  border-radius: 4px;
-  border: 1px solid #bbb;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
   cursor: pointer;
-  box-sizing: border-box;	
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+      border-top-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: transparent;
+      border-left-color: transparent;
+  border-radius: 4px;
 }
 
 input[type="file"] {
@@ -160,44 +173,45 @@ input[type="file"] {
 }
 @keyframes fadeOut {
    0% {opacity: 1;}
-   100% {opacity: 0;} 
-} 
+   100% {opacity: 0;}
+}
 
-/* Tooltip container */
-.tooltip {
-    position: relative;
-    background-color: #757575;
-    display: inline-block;
-    border-radius: 30px;
-    width: 25px;
-    height: 25px;
-    text-align: center;
-    font-size: 16px;
-	font-weight: 700;
-	color: #F9F9F9;
+.tooltipCustom {
+  position: relative;
+  background-color: #757575;
+  display: inline-block;
+  border-radius: 30px;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0 5px;
+  color: #F9F9F9;
+  transform: translateY(2px);
 }
 
 /* Tooltip text */
-.tooltip .tooltiptext {
-    visibility: hidden;
+.tooltipCustom .tooltiptext {
+  visibility: hidden;
 
-    max-width: 10em;
-    min-height: 5em;
-    background-color: grey;
-    color: #F9F9F9;
-    text-align: center;
-    padding: 5px 5px;
-    border-radius: 6px;
-    font-size: 80%;
- 	position: fixed;
+  max-width: 10em;
+  min-height: 5em;
+  background-color: grey;
+  color: #F9F9F9;
+  text-align: center;
+  padding: 5px 5px;
+  border-radius: 6px;
+  font-size: 80%;
+  position: fixed;
 
-    margin-left: -3em;
-    z-index: 2;
+  margin-left: -3em;
+  z-index: 2;
 }
-.tooltip:hover {
-    cursor: help;
+.tooltipCustom:hover {
+  cursor: help;
 }
 /* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
-    visibility: visible;
+.tooltipCustom:hover .tooltiptext {
+  visibility: visible;
 }

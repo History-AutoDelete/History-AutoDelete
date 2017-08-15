@@ -1,8 +1,8 @@
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const plugins = [
-  new BundleAnalyzerPlugin({
-        analyzerMode: 'static'
-  })
+  // new BundleAnalyzerPlugin({
+  //       analyzerMode: 'static'
+  // })
 ];
 const moduleConfig = {
   rules: [

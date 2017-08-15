@@ -1,6 +1,16 @@
 {
   "releases":[
     {
+      "version": "2.0.0",
+      "notes": [
+        "Changed: Under the hood improvements with React/Redux. Your settings and Domain list will be migrated automatically on update.",
+        "Changed: Changed Strict String Matching to Expression Matching. Now you can use wildcards in your domains like git*b.com to match github.com and gitlab.com",
+        "Added: Support for deleting history via the path such as reddit.com/r/*/comments/*",
+        "Changed: UI Refresh with BootStrap",
+        "Changed: The old exported Domains are not compatible anymore with 2.X.X since it is an entirely different (better) storage format."
+      ]
+    },
+    {
       "version": "1.1.0",
       "notes": [
         "Some code cleanup"

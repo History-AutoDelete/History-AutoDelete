@@ -6,13 +6,9 @@ import HistorySettings from './components/HistorySettings';
 import Expressions from './components/Expressions';
 import About from './components/About';
 
-const mapTabToContent = {
-  tabWelcome: "welcomeContent"
-}
-
 class App extends Component {
   state = {
-    activeTab: "tabExpressionList"
+    activeTab: "tabWelcome"
   }
 
 

@@ -1,6 +1,6 @@
 import createStore from './redux/Store';
 import { getHostname, isAWebpage, spliceWWW } from './libs';
-import { incrementHistoryDeletedCounter, updateSetting, addExpression } from './redux/Actions'
+import { incrementHistoryDeletedCounter, updateSetting, addExpression } from './redux/Actions';
 
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;
@@ -11,10 +11,10 @@ let store;
 let currentSettings;
 
 const onStartUp = async() => {
-	const stateObject = await browser.storage.local.get("state");
+	const storage = await browser.storage.local.get();
 	let stateFromStorage;
-	if(stateObject.state !== undefined) {
-		stateFromStorage = JSON.parse(stateObject.state);
+	if(storage.state !== undefined) {
+		stateFromStorage = JSON.parse(storage.state);
 	} else {
 		stateFromStorage = {};
 	}
@@ -22,9 +22,8 @@ const onStartUp = async() => {
 	currentSettings = store.getState().settings;
 	store.subscribe(onSettingsChange);
 	store.subscribe(saveToStorage);
-	migration();
+	migration(storage);
   if(getSetting("keepHistory")) {
-    console.log("Created alarm");
     createOldHistoryAlarm();
     deleteOldHistory();
   }
@@ -56,16 +55,12 @@ const onSettingsChange = () => {
   if(currentSettings["keepHistory"].value && previousSettings["keepHistory"].value !== currentSettings["keepHistory"].value) {
     createOldHistoryAlarm();
     deleteOldHistory();
-    console.log("Created alarm");
   } else if (!currentSettings["keepHistory"].value && previousSettings["keepHistory"].value !== currentSettings["keepHistory"].value) {
     browser.alarms.clear("historyAutoDeleteAlarm");
-    console.log("Deleted alarm");
   }
 }
 
-const migration = async() => {
-	const oldSettings = await browser.storage.local.get();
-	console.log(oldSettings);
+const migration = (oldSettings) => {
 	if(Object.keys(oldSettings) !== 0 && oldSettings.migration_1 === undefined && oldSettings.keepHistorySetting !== undefined) {
 		store.dispatch(
 			updateSetting({payload: {name: "keepHistory", value: oldSettings.keepHistorySetting} })
@@ -117,7 +112,7 @@ browser.tabs.onUpdated.addListener( async (tabId, changeInfo, tab) => {
 });
 
 
-const findMatch = (url, expressionList) => {
+const findMatch = (expressionList, url) => {
   return expressionList.some(expression => {
     // Have to make a new RegExp to avoid mutating the one in the store after test
     const regExpObj = new RegExp(expression.regExp);
@@ -125,7 +120,7 @@ const findMatch = (url, expressionList) => {
   });
 }
 
-//Deletes the history on visit if in the set
+//Deletes the history on visit if in the expression list
 browser.history.onVisited.addListener((historyItem) => {
   const currentHostUrl = spliceWWW(historyItem.url);
   if(findMatch(currentHostUrl, store.getState().expressions)) {

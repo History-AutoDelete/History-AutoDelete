@@ -26,6 +26,7 @@
     "eslint-plugin-json": "^1.2.0",
     "eslint-plugin-mocha": "^4.11.0",
     "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-react": "^7.2.1",
     "istanbul": "^0.4.5",
     "mocha": "^3.4.2",
     "sinon": "^3.0.0",
@@ -34,8 +35,11 @@
     "webpack-bundle-analyzer": "^2.9.0"
   },
   "scripts": {
-    "start": "webpack --config webpack.config.js --progress --colors --watch",
-    "build": "NODE_ENV=production webpack -p"
+    "test": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec ./test/*",
+    "build": "./node_modules/.bin/webpack --config webpack.config.js && ./tools/buildFilesDev.sh",
+    "dev": "./node_modules/.bin/webpack --config webpack.config.js --progress --colors --watch",
+    "lint": "./node_modules/.bin/eslint --ext=.js,.json src/** test/** extension/_locales/**",
+    "test-all": "npm run test && npm run lint"
   },
   "repository": {
     "type": "git",

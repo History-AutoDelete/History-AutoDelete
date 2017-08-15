@@ -30,7 +30,6 @@ const getMatchedExpressions = createSelector(
     return expressions.filter(expression => {
       const regObj = new RegExp(expression.regExp);
       const result = regObj.test(url);
-      console.log(regObj, url, result);
       return result;
     })
   }

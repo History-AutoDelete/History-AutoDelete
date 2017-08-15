@@ -38,7 +38,6 @@ const styles = {
 class ExpressionTableBody extends React.Component {
   constructor(props) {
     super(props);
-    console.log(1, props);
     this.state = {
       expressionInput: "",
       editMode: false,

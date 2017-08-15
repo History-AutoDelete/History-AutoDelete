@@ -1,4 +1,3 @@
-
 // Returns the host name of the url. Etc. "https://en.wikipedia.org/wiki/Cat" becomes en.wikipedia.org
 export const getHostname = (urlToGetHostName) => {
 	let hostname;
@@ -21,14 +20,14 @@ export const isAWebpage = (URL) => {
 };
 
 export const spliceWWW = (url) => {
-  let newURL;
-  try {
-    let urlObject = new URL(url);
-    newURL = `${urlObject.hostname}${urlObject.pathname}`;
-    // Strip "www." if the URL starts with it.
-    newURL = newURL.replace(/^www[a-z0-9]?\./, "");
-  } catch (error) {
-    return "";
-  }
-  return newURL;
+	let newURL;
+	try {
+		let urlObject = new URL(url);
+		newURL = `${urlObject.hostname}${urlObject.pathname}`;
+		// Strip "www." if the URL starts with it.
+		newURL = newURL.replace(/^www[a-z0-9]?\./, "");
+	} catch (error) {
+		return "";
+	}
+	return newURL;
 };

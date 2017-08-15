@@ -23,7 +23,7 @@ const moduleConfig = {
           loader: 'json-loader',
         }
       ]
-    },
+    }
 
   ]
 };
@@ -60,6 +60,7 @@ const settingConfig = {
         // "node/npm module name": "name of exported library variable"
         "react": "React",
         "react-dom": "ReactDOM",
+        "prop-types": "PropTypes",
         "redux": "Redux",
         "react-redux": "ReactRedux",
         "redux-webext": "ReduxWebExt"
@@ -80,6 +81,7 @@ const popupConfig = {
         // "node/npm module name": "name of exported library variable"
         "react": "React",
         "react-dom": "ReactDOM",
+        "prop-types": "PropTypes",
         "redux": "Redux",
         "react-redux": "ReactRedux",
         "redux-webext": "ReduxWebExt",

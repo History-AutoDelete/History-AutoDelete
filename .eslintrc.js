@@ -2,6 +2,7 @@
 
 module.exports = {
   // When adding items to this file please check for effects on sub-directories.
+  "parser": "babel-eslint",
   "parserOptions": {"ecmaFeatures": {"jsx": true}, "sourceType": "module"},
   "env": {
     "browser": true,
@@ -42,7 +43,7 @@ module.exports = {
     "accessor-pairs": [2, {"setWithoutGet": true, "getWithoutSet": false}],
     "array-bracket-spacing": [2, "never"],
     "array-callback-return": 2,
-    "arrow-body-style": [2, "always"],
+    "arrow-body-style": [2, "as-needed"],
     "arrow-parens": [2, "always"],
     "arrow-spacing": 2,
     "block-scoped-var": 2,
@@ -241,7 +242,7 @@ module.exports = {
     "rest-spread-spacing": [2, "never"],
     "semi": [2, "always"],
     "semi-spacing": [2, {"before": false, "after": true}],
-    "sort-imports": 2,
+    "sort-imports": 0,
     "sort-vars": 2,
     "space-before-blocks": [2, "always"],
     "space-before-function-paren": [2, {"anonymous": "never", "named": "never"}],

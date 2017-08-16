@@ -83,9 +83,13 @@ const findMatch = (expressionList, url) => expressionList.some((expression) => {
 const onStartUp = async () => {
 	const storage = await browser.storage.local.get();
 	let stateFromStorage;
-	if (storage.state !== undefined) {
-		stateFromStorage = JSON.parse(storage.state);
-	} else {
+	try {
+		if (storage.state !== undefined) {
+			stateFromStorage = JSON.parse(storage.state);
+		} else {
+			stateFromStorage = {};
+		}
+	} catch (err) {
 		stateFromStorage = {};
 	}
 	store = createStore(stateFromStorage);
@@ -137,7 +141,7 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 browser.history.onVisited.addListener((historyItem) => {
 	const currentHostUrl = spliceWWW(historyItem.url);
 	if (findMatch(store.getState().expressions, currentHostUrl)) {
-		if(getSetting("statLogging")) {
+		if (getSetting("statLogging")) {
 			store.dispatch(
 				incrementHistoryDeletedCounter()
 			);

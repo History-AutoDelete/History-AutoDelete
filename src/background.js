@@ -93,10 +93,10 @@ const onStartUp = async () => {
 		stateFromStorage = {};
 	}
 	store = createStore(stateFromStorage);
+	migration(storage);
 	currentSettings = store.getState().settings;
 	store.subscribe(onSettingsChange);
 	store.subscribe(saveToStorage);
-	migration(storage);
 	if (getSetting("keepHistory")) {
 		createOldHistoryAlarm();
 		deleteOldHistory();

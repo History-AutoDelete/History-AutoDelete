@@ -8,6 +8,7 @@
         "Added: Support for deleting history via the path such as reddit.com/r/*/comments/*",
         "Changed: UI Refresh with BootStrap",
         "Changed: The old exported Domains are not compatible anymore with 2.X.X since there is an entirely different (better) storage format."
+        "Fixed (2.0.1): Fixed a problem with the migration code"
       ]
     },
     {

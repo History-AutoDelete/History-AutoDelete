@@ -1,4 +1,4 @@
-import {addExpression, incrementHistoryDeletedCounter, updateSetting} from "./redux/Actions";
+import {addExpression, incrementHistoryDeletedCounter, updateSetting, validateSettings} from "./redux/Actions";
 import {getHostname, isAWebpage, spliceWWW} from "./libs";
 import createStore from "./redux/Store";
 
@@ -36,22 +36,22 @@ const migration = (oldSettings) => {
 	if (Object.keys(oldSettings) !== 0 && oldSettings.migration_1 === undefined && oldSettings.keepHistorySetting !== undefined) {
 		store.dispatch(
 			updateSetting({payload: {
-				name: "keepHistory", value: oldSettings.keepHistorySetting
+				id: 1, name: "keepHistory", value: oldSettings.keepHistorySetting
 			}})
 		);
 		store.dispatch(
 			updateSetting({payload: {
-				name: "daysToKeep", value: oldSettings.daysToKeep
+				id: 2, name: "daysToKeep", value: oldSettings.daysToKeep
 			}})
 		);
 		store.dispatch(
 			updateSetting({payload: {
-				name: "statLogging", value: oldSettings.statLoggingSetting
+				id: 3, name: "statLogging", value: oldSettings.statLoggingSetting
 			}})
 		);
 		store.dispatch(
 			updateSetting({payload: {
-				name: "showVisitsInIcon", value: oldSettings.showVisitsInIconSetting
+				id: 4, name: "showVisitsInIcon", value: oldSettings.showVisitsInIconSetting
 			}})
 		);
 		oldSettings.URLS.forEach((domain) => store.dispatch(addExpression({payload: {expression: `${domain}*`}})));
@@ -94,6 +94,9 @@ const onStartUp = async () => {
 	}
 	store = createStore(stateFromStorage);
 	migration(storage);
+	store.dispatch(
+		validateSettings()
+	);
 	currentSettings = store.getState().settings;
 	store.subscribe(onSettingsChange);
 	store.subscribe(saveToStorage);

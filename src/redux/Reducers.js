@@ -1,6 +1,7 @@
 import C from "./Constants";
 import {combineReducers} from "redux";
 import shortid from "shortid";
+import initialState from "./initialState.json";
 
 // http://kevin.vanzonneveld.net
 // +   original by: booeyOH
@@ -69,35 +70,17 @@ export const expressions = (state = [], action) => {
 	}
 };
 
-const initialSettings = {
-	keepHistory: {
-		name: "keepHistory",
-		value: false,
-		id: 1
-	},
-	daysToKeep: {
-		name: "daysToKeep",
-		value: 60,
-		id: 2
-	},
-	statLogging: {
-		name: "statLogging",
-		value: true,
-		id: 3
-	},
-	showVisitsInIcon: {
-		name: "showVisitsInIcon",
-		value: false,
-		id: 4
-	}
-};
+const initialSettings = initialState.settings;
 
 export const settings = (state = initialSettings, action) => {
 	switch (action.type) {
 	case C.UPDATE_SETTING: {
 		const {name} = action.payload;
 		let newObject = {...state};
-		newObject[name] = action.payload;
+		newObject[name] = {
+			...action.payload,
+			id: shortid.generate()
+		};
 		return newObject;
 	}
 	case C.RESET_SETTINGS:

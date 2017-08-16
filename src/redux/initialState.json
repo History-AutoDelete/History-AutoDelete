@@ -1,0 +1,26 @@
+{
+  "expression": [],
+  "historyDeletedCounterTotal": 0,
+	"settings": {
+  	"keepHistory": {
+  		"name": "keepHistory",
+  		"value": false,
+  		"id": 1
+  	},
+  	"daysToKeep": {
+  		"name": "daysToKeep",
+  		"value": 60,
+  		"id": 2
+  	},
+  	"statLogging": {
+  		"name": "statLogging",
+  		"value": true,
+  		"id": 3
+  	},
+  	"showVisitsInIcon": {
+  		"name": "showVisitsInIcon",
+  		"value": false,
+  		"id": 4
+  	}
+  }
+}
